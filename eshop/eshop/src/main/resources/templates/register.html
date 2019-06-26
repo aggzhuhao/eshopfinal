@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>注册</title>
+    <link  type="text/css" href="css/bootstrap.min.css" rel="stylesheet">
+    <link type="text/css" href="css/style.css" rel="stylesheet">
+    <link type="text/css" href="css/font-awesome.min.css" rel="stylesheet">
+    <script type="text/javascript" src="js/jquery-1.11.3.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" data-main="js/main" src="js/checkcode.js"></script>
+    <script type="text/javascript" data-main="js/main" src="js/jquery.validate.js"></script>
+    <style>
+        #registerform label.error {
+            margin-left: 10px;
+            width: auto;
+            display: inline;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+<div class="top">
+    <div class="container">
+        <div class="pull-left top-text">
+            <span th:if="${#session?.getAttribute('user')} != null">Hi～亲爱的[(${#session.getAttribute("user")?.username})]</span>
+            <a th:if="${#session?.getAttribute('user')}  == null" th:href="@{/login}">登录</a>
+            <a th:if="${#session?.getAttribute('user')}  == null" th:href="@{/register}">注册</a>
+            <a th:if="${#session?.getAttribute('user')}  != null" th:href="@{/removeuser}">注销</a>
+        </div>
+        <div th:if="${#session?.getAttribute('user')}  != null" class="pull-right user-info">
+            <div class="top-group" style="cursor: pointer">
+                我的账户 <i class="icon-angle-down"></i>
+                <div class="user-menu">
+                    <a href="/article/zhuceyonghu">注册新用户</a></li>
+                    <a href="/article/xieyi">用户协议</a></li>
+                    <a href="/article/xiugaixinxi">修改信息</a></li>
+                </div>
+            </div>
+            <div class="top-group"><a href="orderlist"><i class="icon-reorder"></i>我的订单</a></div>
+            <div class="top-group"><a id="tocart" href="javascript:void(0)"><i class="icon-shopping-cart"></i>购物车</a></div>
+        </div>
+    </div>
+</div>
+<div class="header">
+    <div class="container">
+        <div class="logo pull-left">
+            <a href="#">
+                <img src="images/logo.png" width="250px" height="100px" >
+            </a>
+        </div>
+        <div class="nav-menu pull-left">
+            <ul class="nav navbar-nav">
+                <li ><a href="/index">首页</a></li>
+                <li ><a href="/shownew">每周新品预售</a></li>
+                <li><a href="/discount">限时打折</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="login">
+        <div class="logo">
+            <a href="#">
+                <img src="images/logo.png" width="250px" height="100px" >
+            </a>
+             <div class="logo-text"><h3><b>注册用户</b></h3></div>
+        </div>
+        <div class="register-form ">
+            <form id="registerform" class="form-horizontal" method="post" action="/createUser">
+                <div class="form-group">
+                    <i class="icon-user"></i>
+                    <input id="username" type="text" name="username" class="form-control" placeholder="用户名"/>
+                </div>
+                <div class="form-group">
+                    <i class=" icon-envelope"></i>
+                    <input id="email" name="email" class="form-control" placeholder="邮箱"/>
+                </div>
+                <div class="form-group">
+                    <i class="icon-phone"></i>
+                    <input type="text" name="phone" class="form-control" placeholder="手机"/>
+                </div>
+                <div class="form-group">
+                    <i class="icon-key"></i>
+                    <input type="password" id="password" name="password" class="form-control" placeholder="密码"/>
+                </div>
+                <div class="form-group">
+                    <i class="icon-lock"></i>
+                    <input type="password" name="password1" class="form-control" placeholder="确认密码"/>
+                </div>
+                <div class="form-group">
+                    <i class="icon-check"></i>
+                    <input id="codeinput" type="text"  name="codeinput" class="form-control checkcode" placeholder="验证码"/>
+                    <div class="pull-left"><div id="v_container" style="width: 150px;height: 50px;"></div>
+                    </div>
+                </div>
+                <label id="checklabel" style="color: red;display: none ">验证码不正确</label>
+                <div>
+                    <input id="item2" type="checkbox" name="admin" value="1">
+                    <label name="itemlabel" for="item2"></label>
+                    <span style="margin-left: 10px">是否成为管理员</span>
+                </div>
+                <div class="form-group">
+                    <button id="commit" type="button" class="btn btn-block">立即注册</button>
+                </div>
+
+                <div class="form-group">
+                    <h5>已经帐号？<a href="login">立即登录</a></h5>
+                </div>
+                <div class="form-group">
+                    <h5><a href="#">返回首页</a></h5>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="footer">
+    <div class="container">
+        <div class="footer-group pull-left">
+            <ul class="footer-list">
+                <li class="top-title"><span>新手指南</span></li>
+                <li><a href="/article/zhuceyonghu">注册新用户</a></li>
+                <li><a href="/article/xieyi">用户协议</a></li>
+                <li><a href="/article/xiugaixinxi">修改信息</a></li>
+            </ul>
+            <ul class="footer-list">
+                <li class="top-title"><span>购物指南</span></li>
+                <li><a href="/article/gouwuliucheng">购物流程</a></li>
+            </ul>
+            <ul class="footer-list">
+                <li class="top-title"><span>购物车</span></li>
+                <li><a href="/article/gouwucheshuoming">购物车说明</a></li>
+            </ul>
+        </div>
+        <div class="footer-group pull-right">
+            <div class="contact">
+                <img src="images/contact.jpg">
+            </div>
+            <p>监督：1038334827</p>
+            <p> 在线客服</p>
+        </div>
+        <div class="copy-right">
+            <p><span>CopyRight © 2018-2019 127.0.0.1:8080 right to zh</span></p>
+        </div>
+    </div>
+</div>
+<div class="sticky">
+    <div><a href="#" title="返回顶部"><i class="icon-angle-up"></i></a></div>
+</div>
+
+<!--置顶-->
+</body>
+<script>
+
+    //表单校验
+    $(function(){
+        var reg = new RegExp("^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$");
+        $("#codeinput").click(function(){
+            $("#checklabel").hide();
+        })
+        var verifyCode = new GVerify("v_container");
+        $("#commit").click(function(){
+            //验证码校验
+            var res = verifyCode.validate(document.getElementById("codeinput").value);
+            if(res){
+                if(!reg.test($("#email").val())){
+                    $("#email").after(`<label id="email-error" class="error" for="email">请输入正确的邮箱格式！</label>`)
+                }else{
+                    $("#registerform").submit();
+                }
+
+            }else{
+                $("#checklabel").show();
+            }
+        })
+        $("#registerform").validate({
+            rules:{
+                username:{
+                    required:true,
+                    remote:{//ajax校验数据库是否存在该账号
+                        url:"/checkusername",
+                        type:"post",
+                        data:{
+                            "username":function(){
+                                return $("#username").val();
+                            }
+                        }
+                    }
+                },
+                email:{
+                    required:true,
+                    remote:{
+                        url:"/checkemail",
+                        type:"post",
+                        data:{
+                            "email":function(){
+                                return $("#email").val();
+                            }
+                        }
+                    }
+                },
+                phone:{
+                    required:true
+                },
+                password:{
+                    required:true
+                },
+                password1:{
+                    equalTo:"#password"
+                }
+            },messages:{
+                username:{
+                    required:"姓名不能为空",
+                    remote:"已经存在该账户"
+                },
+                email:{
+                    required:"邮箱不能为空",
+                    remote:"该邮箱已经被注册！"
+                },
+                phone:{
+                    required:"手机号不能为空"
+                },
+                password:{
+                    required:"密码不能为空"
+                },
+                password1:{
+                    equalTo:"两次输入的密码不一致"
+                }
+            }
+        })
+
+    })
+
+
+</script>
+</html>

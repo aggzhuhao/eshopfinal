@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>订单详情</title>
+    <link  type="text/css" href="css/bootstrap.min.css" rel="stylesheet">
+    <link type="text/css" href="css/style.css" rel="stylesheet">
+    <link type="text/css" href="css/font-awesome.min.css" rel="stylesheet">
+
+
+    <script type="text/javascript" src="js/jquery-1.11.3.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" data-main="js/main" src="js/require.js"></script>
+    <style>
+        table, th , td  {
+            border: 1px solid grey;
+            border-collapse: collapse;
+            padding: 5px;
+        }
+        table tr:nth-child(odd) {
+            background-color: #f1f1f1;
+        }
+        table tr:nth-child(even) {
+            background-color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+<div class="top">
+    <div class="container">
+        <div class="pull-left top-text">
+            <span th:if="${#session?.getAttribute('user')} != null">Hi～亲爱的[(${#session.getAttribute("user")?.username})]</span>
+            <a th:if="${#session?.getAttribute('user')}  == null" th:href="@{/login}">登录</a>
+            <a th:if="${#session?.getAttribute('user')}  == null" th:href="@{/register}">注册</a>
+            <a th:if="${#session?.getAttribute('user')}  != null" th:href="@{/removeuser}">注销</a>
+        </div>
+        <div th:if="${#session?.getAttribute('user')}  != null" class="pull-right user-info">
+            <div class="top-group" style="cursor: pointer">
+                我的账户 <i class="icon-angle-down"></i>
+                <div class="user-menu">
+                    <a href="/article/zhuceyonghu">注册新用户</a></li>
+                    <a href="/article/xieyi">用户协议</a></li>
+                    <a href="/article/xiugaixinxi">修改信息</a></li>
+                </div>
+            </div>
+            <div class="top-group"><a href="orderlist"><i class="icon-reorder"></i>我的订单</a></div>
+            <div class="top-group"><a id="tocart" href="javascript:void(0)"><i class="icon-shopping-cart"></i>购物车</a></div>
+        </div>
+    </div>
+</div>
+<div class="header">
+    <div class="container">
+        <div class="logo pull-left">
+            <a href="#">
+                <img src="images/logo.png" width="250px" height="100px" >
+            </a>
+        </div>
+        <div class="nav-menu pull-left">
+            <ul class="nav navbar-nav">
+                <li ><a href="/index">首页</a></li>
+                <li ><a href="/shownew">每周新品预售</a></li>
+                <li><a href="/discount">限时打折</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="main">
+    <div id="templatemo_main">
+
+        <div id="content" class="float_l" style="word-break: break-all; word-wrap: break-word;border-collapse:separate; border-spacing:0px 10px;margin-left:40px">
+            <h2 align="center">订单详情</h2>
+
+
+            <table style="font-size: 20px;" align="center">
+                <tr>
+                    <th colspan="2" align="left">订单</th>
+                </tr>
+                <tr>
+                    <td>订单号:</td>
+                    <td th:text="${session.order.orderId}"></td>
+                </tr>
+
+                <tr>
+                    <td>创建日期:</td>
+                    <td th:text="${session.order.creatTimestr}"></td>
+                </tr>
+
+                <tr>
+                    <th colspan="2" align="left">付款信息</th>
+                </tr>
+
+                <tr>
+                    <td>支付类型:</td>
+                    <td th:if="${session.order.parment == 1}">支付宝</td>
+                    <td th:if="${session.order.parment == 2}">微信</td>
+                </tr>
+                <tr>
+                    <td>金额:</td>
+                    <td>￥[(${session.order.amount})]</td>
+                </tr>
+
+                <tr>
+                    <th colspan="2" align="left">收货人信息</th>
+                </tr>
+                <tr>
+                    <td>姓名:</td>
+                    <td th:text="${session.order.peceiver}"></td>
+                </tr>
+
+                <tr>
+                    <td>省份:</td>
+                    <td th:text="${session.order.province}"></td>
+                </tr>
+
+                <tr>
+                    <td>城市:</td>
+                    <td th:text="${session.order.city}"></td>
+                </tr>
+
+                <tr>
+                    <td>区、县:</td>
+                    <td th:text="${session.order.country}"></td>
+                </tr>
+
+                <tr>
+                    <td>地址:</td>
+                    <td th:text="${session.order.address}"></td>
+                </tr>
+
+                <tr>
+                    <td>邮政编码:</td>
+                    <td th:text="${session.order.zipcode}"></td>
+                </tr>
+
+                <tr>
+                    <td>电话:</td>
+                    <td th:text="${session.order.telphone}"></td>
+                </tr>
+
+            </table>
+            <br>
+
+            <table style="border:1px solid #CCCCCC;" width="100%">
+                <tr id="detailtr">
+                    <td>产品编号</td>
+                    <td>产品描述</td>
+                    <td>数量</td>
+                    <td>价格</td>
+                    <td>小计</td>
+                </tr>
+
+                <tr>
+                    <td colspan="5" align="right"><p id="countmoney" style="font-weight:bold;padding:0 25px"></p></td>
+                </tr>
+            </table>
+            <br>
+
+
+            <a href="javascript:history.go(-1);location.reload()">返回订单列表</a>
+
+
+        </div>
+
+
+        <div class="cleaner"></div>
+    </div>
+</div>
+<div class="footer">
+    <div class="container">
+        <div class="footer-group pull-left">
+            <ul class="footer-list">
+                <li class="top-title"><span>新手指南</span></li>
+                <li><a href="/article/zhuceyonghu">注册新用户</a></li>
+                <li><a href="/article/xieyi">用户协议</a></li>
+                <li><a href="/article/xiugaixinxi">修改信息</a></li>
+            </ul>
+            <ul class="footer-list">
+                <li class="top-title"><span>购物指南</span></li>
+                <li><a href="/article/gouwuliucheng">购物流程</a></li>
+            </ul>
+            <ul class="footer-list">
+                <li class="top-title"><span>购物车</span></li>
+                <li><a href="/article/gouwucheshuoming">购物车说明</a></li>
+            </ul>
+        </div>
+        <div class="footer-group pull-right">
+            <div class="contact">
+                <img src="images/contact.jpg">
+            </div>
+            <p>监督：1038334827</p>
+            <p> 在线客服</p>
+        </div>
+        <div class="copy-right">
+            <p><span>CopyRight © 2018-2019 127.0.0.1:8080 right to zh</span></p>
+        </div>
+    </div>
+</div>
+<div class="sticky">
+    <div><a href="#" title="返回顶部"><i class="icon-angle-up"></i></a></div>
+</div>
+<!--置顶-->
+</body>
+<script>
+    $(function () {
+        $("#tocart").click(function () {
+            window.location.href="/selectAllshoppingCartInproduct";
+        })
+        var countmoney = 0;
+        $.ajax({
+            url:"/orderdetailload",
+            success:function (data) {
+                $.each(data,function (index,orderdetail) {
+                    countmoney += orderdetail.price * orderdetail.quantity;
+                    $("#detailtr").after(
+                        `
+                            <tr>
+                                <td>${orderdetail.productId }</td>
+                                <td>${orderdetail.description }</td>
+                                <td>${orderdetail.quantity }</td>
+                                <td>￥${orderdetail.price }</td>
+                                <td>￥${orderdetail.price * orderdetail.quantity}</td>
+                             </tr>
+                        `
+                    )
+                })
+                $("#countmoney").text("总金额: ￥" + countmoney);
+            }
+        })
+    })
+
+</script>
+</html>

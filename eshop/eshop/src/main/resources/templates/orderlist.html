@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>订单</title>
+    <link  type="text/css" href="css/bootstrap.min.css" rel="stylesheet">
+    <link type="text/css" href="css/style.css" rel="stylesheet">
+    <link type="text/css" href="css/font-awesome.min.css" rel="stylesheet">
+    <script type="text/javascript" src="js/jquery-1.11.3.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" data-main="js/main" src="js/require.js"></script>
+    <style>
+        table, th , td  {
+            border: 1px solid grey;
+            border-collapse: collapse;
+            padding: 5px;
+        }
+        table tr:nth-child(odd) {
+            background-color: #f1f1f1;
+        }
+        table tr:nth-child(even) {
+            background-color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+<div class="top">
+    <div class="container">
+        <div class="pull-left top-text">
+            <span th:if="${#session?.getAttribute('user')} != null">Hi～亲爱的[(${#session.getAttribute("user")?.username})]</span>
+            <a th:if="${#session?.getAttribute('user')}  == null" th:href="@{/login}">登录</a>
+            <a th:if="${#session?.getAttribute('user')}  == null" th:href="@{/register}">注册</a>
+            <a th:if="${#session?.getAttribute('user')}  != null" th:href="@{/removeuser}">注销</a>
+        </div>
+        <div th:if="${#session?.getAttribute('user')}  != null" class="pull-right user-info">
+            <div class="top-group" style="cursor: pointer">
+                我的账户 <i class="icon-angle-down"></i>
+                <div class="user-menu">
+                    <a href="/article/zhuceyonghu">注册新用户</a></li>
+                    <a href="/article/xieyi">用户协议</a></li>
+                    <a href="/article/xiugaixinxi">修改信息</a></li>
+                </div>
+            </div>
+            <div class="top-group"><a href="orderlist"><i class="icon-reorder"></i>我的订单</a></div>
+            <div class="top-group"><a id="tocart" href="javascript:void(0)"><i class="icon-shopping-cart"></i>购物车</a></div>
+        </div>
+    </div>
+</div>
+<div class="header">
+    <div class="container">
+        <div class="logo pull-left">
+            <a href="#">
+                <img src="images/logo.png" width="250px" height="100px" >
+            </a>
+        </div>
+        <div class="nav-menu pull-left">
+            <ul class="nav navbar-nav">
+                <li ><a href="/index">首页</a></li>
+                <li ><a href="/shownew">每周新品预售</a></li>
+                <li><a href="/discount">限时打折</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="main">
+    <div class="container">
+        <div class="cart">
+            <div class="cart-mark">
+                <div class="pull-left">
+                </div>
+                <div class="pull-right">
+                    <div class="cart-process">
+                        <div class="line"></div>
+                        <div class="process-item">
+                            <div>1</div>
+                            <p>购物车</p>
+                        </div>
+                        <div class="process-item ">
+                            <div>2</div>
+                            <p>确认订单</p>
+                        </div>
+                        <div class="process-item">
+                            <div class="active">3</div>
+                            <p>订单列表</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+                <div id="templatemo_main">
+                    <div id="content" class="float_l" style="height:600px;margin-left:40px">
+
+
+
+                        <table style="border:1px solid #CCCCCC;" width="100%" id="tableorder">
+
+
+
+
+                        </table>
+
+                        <br>
+
+                        当前第<span id="noewpage"  class="more">1</span>页
+                        共计<span id="countpage"  class="more"></span>页<br> 订单数为<span id="countorder"  class="more"></span>条<br>
+                        <a id="first" href="javascript:void(0)" class="more">首页</a> |
+                        <a id="pre" href="javascript:void(0)" class="more">上一页</a> |
+                        <a id="next" href="javascript:void(0)"  class="more">下一页</a> |
+                        <a id="last" href="javascript:void(0)"  class="more">尾页</a>
+                        <div style="text-align: right"><a id="exportexcel" href="javascript:void (0)">点击生成excel表格</a></div>
+                        <br>
+                    </div>
+            </div>
+
+    </div>
+</div>
+
+    <div class="footer">
+        <div class="container">
+            <div class="footer-group pull-left">
+                <ul class="footer-list">
+                    <li class="top-title"><span>新手指南</span></li>
+                    <li><a href="/article/zhuceyonghu">注册新用户</a></li>
+                    <li><a href="/article/xieyi">用户协议</a></li>
+                    <li><a href="/article/xiugaixinxi">修改信息</a></li>
+                </ul>
+                <ul class="footer-list">
+                    <li class="top-title"><span>购物指南</span></li>
+                    <li><a href="/article/gouwuliucheng">购物流程</a></li>
+                </ul>
+                <ul class="footer-list">
+                    <li class="top-title"><span>购物车</span></li>
+                    <li><a href="/article/gouwucheshuoming">购物车说明</a></li>
+                </ul>
+            </div>
+            <div class="footer-group pull-right">
+                <div class="contact">
+                    <img src="images/contact.jpg">
+                </div>
+                <p>监督：1038334827</p>
+                <p> 在线客服</p>
+            </div>
+            <div class="copy-right">
+                <p><span>CopyRight © 2018-2019 127.0.0.1:8080 right to zh</span></p>
+            </div>
+        </div>
+    </div>
+    <div class="sticky">
+    <div><a href="#" title="返回顶部"><i class="icon-angle-up"></i></a></div>
+</div>
+<!--置顶-->
+</body>
+<script>
+
+
+
+    $(function () {
+        var startnumber1 = 0;
+        var pagesize = 5;
+        var count = 0; //总数
+        $.ajax({
+            url:"/getOrderlistAjax",
+            type:"post",
+            data:{
+                startnumber:startnumber1,
+                endnumber:pagesize
+            },
+            success:function (data) {
+                for(var key in data){
+                    count = key;
+                    var orderlist = data[key];
+                    if(orderlist.length != 0){
+                        $("#countorder").text(count);
+                        var result = count/pagesize;
+                        if(String(result).indexOf(".") == -1){
+                            $("#countpage").text(count/pagesize);
+                        }else{
+                            $("#countpage").text(Number(String(result).split(".")[0])+1);
+                        }
+
+                        $("#tableorder").append(`
+                        <tr id="orderlisttr">
+                                <td>
+                                    订单编号
+                                </td>
+                                <td width="300px;" style="padding: 0px 20px;">
+                                    订单日期
+                                </td>
+                                <td>金额</td>
+                                <td>收货人</td>
+                            </tr>
+                        `)
+                        $.each(orderlist,function (index, order) {
+
+                            $("#tableorder").append(
+                                `
+                                <tr name="trajax">
+                                        <td>
+                                            <a name="orderid" id="${order.orderId}" href="#" class="more">${order.orderId }</a>
+                                        </td>
+                                        <td width="200px;" style="padding: 0px 20px;">
+                                            ${order.creatTimestr}
+                                        </td>
+                                        <td>￥${order.amount}</td>
+                                        <td>${order.peceiver}</td>
+                                </tr>
+                                `
+                            )
+                        })
+                    }else{
+                        $("#content").css("display","none");
+                        $("#templatemo_main").after(
+                            `
+                            <div class="cart-box">
+                            <div id="noshoppingcart"  class="cart-img">
+                                <div>没有订单哦~</div>、
+                            </div></div>
+                            `
+                        )
+                    }
+                }
+            },complete:function () {
+                $("#next").click(function(){
+                    if(Number($("#noewpage").text()) < Number($("#countpage").text())){
+                        startnumber1 = (startnumber1+pagesize);
+                        $.ajax({
+                            url:"/getOrderlistAjax",
+                            type:"post",
+                            data:{
+                                startnumber:startnumber1,
+                                endnumber:pagesize
+                            },
+                            success:function (data) {
+
+                                    $("#noewpage").text(Number($("#noewpage").text())+1);
+                                    for(var key in data){
+                                        count = key;
+                                        var orderlist = data[key];
+                                        $("#tableorder").empty();
+                                        $("#tableorder").append(`
+                                                <tr id="orderlisttr">
+                                                        <td>
+                                                            订单编号
+                                                        </td>
+                                                        <td width="300px;" style="padding: 0px 20px;">
+                                                            订单日期
+                                                        </td>
+                                                        <td>金额</td>
+                                                        <td>收货人</td>
+                                                    </tr>
+                                                `)
+                                            $.each(orderlist,function (index, order) {
+
+                                                $("#tableorder").append(`
+
+                                        <tr name="trajax">
+                                                <td>
+                                                    <a name="orderid" id="${order.orderId}" href="#" class="more">${order.orderId }</a>
+                                                </td>
+                                                <td width="200px;" style="padding: 0px 20px;">
+                                                    ${order.creatTimestr}
+                                                </td>
+                                                <td>￥${order.amount}</td>
+                                                <td>${order.peceiver}</td>
+                                        </tr>
+                                        `
+                                                )
+                                            })
+
+                                    }
+                            },complete:function () {
+                                $("[name='orderid']").click(function () {
+                                    var orderid = $(this).attr("id");
+                                    window.location.href = "getorderById/"+orderid;
+                                })
+                            }
+
+                        })
+                    }else{
+                        alert("当前已是尾页！");
+                    }
+                })//下一页 next
+
+
+                $("#pre").click(function() {
+                    if (Number($("#noewpage").text()) > 1) {
+                        startnumber1 = (startnumber1-pagesize);
+                        $.ajax({
+                            url: "/getOrderlistAjax",
+                            type: "post",
+                            data: {
+                                startnumber: startnumber1,
+                                endnumber: pagesize
+                            },
+                            success: function (data) {
+
+                                $("#noewpage").text(Number($("#noewpage").text()) - 1);
+                                for (var key in data) {
+                                    count = key;
+                                    var orderlist = data[key];
+                                    $("#tableorder").empty();
+                                    $("#tableorder").append(`
+                                                <tr id="orderlisttr">
+                                                        <td>
+                                                            订单编号
+                                                        </td>
+                                                        <td width="300px;" style="padding: 0px 20px;">
+                                                            订单日期
+                                                        </td>
+                                                        <td>金额</td>
+                                                        <td>收货人</td>
+                                                    </tr>
+                                                `)
+                                    $.each(orderlist, function (index, order) {
+
+                                        $("#tableorder").append(`
+
+                                    <tr name="trajax">
+                                            <td>
+                                                <a name="orderid" id="${order.orderId}" href="#" class="more">${order.orderId}</a>
+                                            </td>
+                                            <td width="200px;" style="padding: 0px 20px;">
+                                                ${order.creatTimestr}
+                                            </td>
+                                            <td>￥${order.amount}</td>
+                                            <td>${order.peceiver}</td>
+                                    </tr>
+                                    `
+                                        )
+                                    })
+
+                                }
+
+                            },complete:function () {
+                                $("[name='orderid']").click(function () {
+                                    var orderid = $(this).attr("id");
+                                    window.location.href = "getorderById/"+orderid;
+                                })
+                            }
+
+                        })
+                   }else{
+                        alert("当前已是首页！");
+                    }
+                })//上一页
+
+                $("#first").click(function() {
+                    if (Number($("#noewpage").text()) > 1) {
+                        startnumber1 = 0;
+                        $.ajax({
+                            url: "/getOrderlistAjax",
+                            type: "post",
+                            data: {
+                                startnumber: startnumber1,
+                                endnumber: pagesize
+                            },
+                            success: function (data) {
+
+                                $("#noewpage").text(1);
+                                for (var key in data) {
+                                    count = key;
+                                    var orderlist = data[key];
+                                    $("#tableorder").empty();
+                                    $("#tableorder").append(`
+                                                <tr id="orderlisttr">
+                                                        <td>
+                                                            订单编号
+                                                        </td>
+                                                        <td width="300px;" style="padding: 0px 20px;">
+                                                            订单日期
+                                                        </td>
+                                                        <td>金额</td>
+                                                        <td>收货人</td>
+                                                    </tr>
+                                                `)
+                                    $.each(orderlist, function (index, order) {
+
+                                        $("#tableorder").append(`
+
+                                    <tr name="trajax">
+                                            <td>
+                                                <a name="orderid" id="${order.orderId}" href="#" class="more">${order.orderId}</a>
+                                            </td>
+                                            <td width="200px;" style="padding: 0px 20px;">
+                                                ${order.creatTimestr}
+                                            </td>
+                                            <td>￥${order.amount}</td>
+                                            <td>${order.peceiver}</td>
+                                    </tr>
+                                    `
+                                        )
+                                    })
+
+                                }
+
+                            },complete:function () {
+                                $("[name='orderid']").click(function () {
+                                    var orderid = $(this).attr("id");
+                                    window.location.href = "getorderById/"+orderid;
+                                })
+                            }
+
+                        })
+                    }else{
+                        alert("当前已是首页！");
+                    }
+                })//首页
+
+                $("#last").click(function() {
+                    if (Number($("#noewpage").text()) < Number($("#countpage").text())) {
+                        if((count % pagesize) == 0){
+                            var pagesize1 = pagesize;
+                            startnumber1 = (Number($("#countpage").text())-1) * pagesize;
+                        }else{
+                            var pagesize1 = (count % pagesize);
+                            startnumber1 = (Number($("#countpage").text())-1) * pagesize;
+                        }
+                        $.ajax({
+                            url: "/getOrderlistAjax",
+                            type: "post",
+                            data: {
+                                startnumber: startnumber1,
+                                endnumber: pagesize1
+                            },
+                            success: function (data) {
+
+                                $("#noewpage").text(Number($("#countpage").text()));
+                                for (var key in data) {
+                                    count = key;
+                                    var orderlist = data[key];
+                                    $("#tableorder").empty();
+                                    $("#tableorder").append(`
+                                                <tr id="orderlisttr">
+                                                        <td>
+                                                            订单编号
+                                                        </td>
+                                                        <td width="300px;" style="padding: 0px 20px;">
+                                                            订单日期
+                                                        </td>
+                                                        <td>金额</td>
+                                                        <td>收货人</td>
+                                                    </tr>
+                                                `)
+                                    $.each(orderlist, function (index, order) {
+
+                                        $("#tableorder").append(`
+
+                                    <tr name="trajax">
+                                            <td>
+                                                <a name="orderid" id="${order.orderId}" href="#" class="more">${order.orderId}</a>
+                                            </td>
+                                            <td width="200px;" style="padding: 0px 20px;">
+                                                ${order.creatTimestr}
+                                            </td>
+                                            <td>￥${order.amount}</td>
+                                            <td>${order.peceiver}</td>
+                                    </tr>
+                                    `
+                                        )
+                                    })
+
+                                }
+
+                            },complete:function () {
+                                $("[name='orderid']").click(function () {
+                                    alert($(this).attr("id"));
+                                })
+                            }
+
+                        })
+                    }else{
+                        alert("当前已是首页！");
+                    }
+                })//尾页
+
+
+                $("[name='orderid']").click(function () {
+                    var orderid = $(this).attr("id");
+                    window.location.href = "getorderById/"+orderid;
+                })
+            }
+        })
+        $("#tocart").click(function () {
+            window.location.href="/selectAllshoppingCartInproduct";
+        })
+        $("#exportexcel").click(function () {
+            window.location.href="/exportexcel";
+        })
+    })
+
+</script>
+</html>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhuhao.eshop.mapper.UserMapper" >
+  <resultMap id="userMap" type="com.zhuhao.eshop.entity.User" >
+    <id column="username" property="username" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="admin" property="admin" jdbcType="VARCHAR" />
+  </resultMap>
+  <select id="selectUserByIdPsw" resultMap="userMap" parameterType="com.zhuhao.eshop.entity.User">
+    SELECT * FROM `user` WHERE  `password` = #{password} and ( `email` = #{username} or username = #{username})
+  </select>
+  <select id="checkusername" parameterType="string" resultMap="userMap">
+    SELECT * FROM USER WHERE username = #{username}
+  </select>
+
+  <select id="checkemail" parameterType="string" resultMap="userMap">
+    SELECT * FROM USER WHERE email = #{email}
+  </select>
+
+  <insert id="createUser" parameterType="com.zhuhao.eshop.entity.User">
+    insert into user(username,password,email,phone,admin) values(#{username},#{password},#{email},#{phone},#{admin})
+  </insert>
+  <update id="updateUserpassword" parameterType="com.zhuhao.eshop.entity.User">
+    UPDATE `user` SET `password` = #{password} WHERE username = #{username};
+  </update>
+  <update id="forgetmailpassword" parameterType="com.zhuhao.eshop.entity.User">
+    UPDATE `user` set password = #{password} where email = #{email};
+  </update>
+</mapper>

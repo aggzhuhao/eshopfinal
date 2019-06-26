@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhuhao.eshop.mapper.TypeMapper" >
+  <resultMap id="typeMap" type="com.zhuhao.eshop.entity.Type" >
+    <id column="typeid" property="typeId" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <association column="typeid" property="categoryList" resultMap="categorytMap"></association>
+  </resultMap>
+  <resultMap id="categorytMap" type="com.zhuhao.eshop.entity.Category" >
+    <id column="category_id" property="categoryId" jdbcType="INTEGER" />
+    <result column="cname" property="name" jdbcType="VARCHAR" />
+    <result column="typeid" property="typeId" jdbcType="INTEGER" />
+  </resultMap>
+
+  <select id="selectAllType" resultMap="typeMap">
+    SELECT * FROM type t, category c WHERE t.typeid = c.typeid
+  </select>
+
+  <select id="selectAllTypeNobyCid" resultMap="typeMap">
+    SELECT * FROM `type`;
+  </select>
+
+
+
+  <select id="selecttypeidbycid" parameterType="com.zhuhao.eshop.entity.Category" resultMap="typeMap">
+    SELECT * FROM type t,category c where t.typeid = c.typeid and c.category_id = #{categoryId}
+  </select>
+
+
+
+  <insert id="inserttype" parameterType="com.zhuhao.eshop.entity.Type">
+    INSERT INTO `type` (`name`) values (#{name});
+  </insert>
+</mapper>

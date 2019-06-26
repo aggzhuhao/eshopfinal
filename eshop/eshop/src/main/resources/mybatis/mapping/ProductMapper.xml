@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhuhao.eshop.mapper.ProductMapper" >
+  <resultMap id="productMap" type="com.zhuhao.eshop.entity.Product" >
+    <id column="product_id" property="productId" jdbcType="INTEGER" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="REAL" />
+    <result column="dicount" property="dicount" jdbcType="INTEGER" />
+    <result column="feature" property="feature" jdbcType="VARCHAR" />
+    <result column="imgpath" property="imgpath" jdbcType="VARCHAR" />
+    <result column="novalty_status" property="novaltyStatus" jdbcType="INTEGER" />
+    <result column="category_id" property="categoryId" jdbcType="INTEGER" />
+    <result column="date" property="date" jdbcType="DATE" />
+  </resultMap>
+  <resultMap id="productMap1" type="com.zhuhao.eshop.entity.Product" >
+    <id column="product_id" property="productId" jdbcType="INTEGER" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="REAL" />
+    <result column="dicount" property="dicount" jdbcType="INTEGER" />
+    <result column="feature" property="feature" jdbcType="VARCHAR" />
+    <result column="imgpath" property="imgpath" jdbcType="VARCHAR" />
+    <result column="novalty_status" property="novaltyStatus" jdbcType="INTEGER" />
+    <result column="category_id" property="categoryId" jdbcType="INTEGER" />
+    <result column="date" property="date" jdbcType="DATE" />
+    <result column="cartnumber" property="cartnumber" />
+    <result column="stocknumber" property="stocknumber" />
+    <result column="shoppingcartid" property="shoppingcartid" />
+  </resultMap>
+  <select id="selectAllProduct" resultMap="productMap">
+    SELECT * FROM product
+  </select>
+
+  <select id="selectProductLimit" resultMap="productMap">
+    SELECT * FROM PRODUCT LIMIT 0,5
+  </select>
+
+  <select id="selectProductById" resultMap="productMap" parameterType="com.zhuhao.eshop.entity.Product">
+  SELECT * FROM PRODUCT WHERE product_id = #{productId}
+  </select>
+
+  <select id="selectlikeProduct" resultMap="productMap" parameterType="string">
+      SELECT * FROM PRODUCT WHERE description like concat(concat('%',#{description}),'%')
+  </select>
+
+  <select id="selectAllshoppingCartInproduct" parameterType="com.zhuhao.eshop.entity.User" resultMap="productMap1">
+  SELECT p.*,c.quantity as cartnumber,s.quantity as stocknumber,c.shopping_cart_id as shoppingcartid  FROM shopping_cart c,product p,stock s WHERE
+   c.USERNAME = #{username} and p.product_id = s.product_id and p.product_id = c.product_id
+  </select>
+
+  <select id="selectnewproduct" resultMap="productMap">
+    SELECT * FROM `product` WHERE novalty_status = 1;
+  </select>
+  <select id="selectdiscountproduct" resultMap="productMap">
+    SELECT * FROM `product` WHERE dicount = 1;
+  </select>
+
+  <insert id="insertproduct" parameterType="com.zhuhao.eshop.entity.Product" useGeneratedKeys="true" keyProperty="productId">
+    INSERT INTO product VALUES(NULL,#{description},#{price},#{dicount},#{feature},#{imgpath},#{novaltyStatus},#{categoryId},#{date});
+  </insert>
+
+  <delete id="deleteproduct" parameterType="com.zhuhao.eshop.entity.Product">
+    DELETE FROM `product` where product_id = #{productId}
+  </delete>
+
+  <update id="updateproduct" parameterType="com.zhuhao.eshop.entity.Product">
+    UPDATE `product` set description = #{description},price = #{price},dicount = #{dicount},feature = #{feature},
+    imgpath = #{imgpath},novalty_status = #{novaltyStatus}, date = #{date}
+    WHERE product_id = #{productId}
+  </update>
+
+  <select id="selecttuijianproduct" parameterType="com.zhuhao.eshop.entity.Category" resultMap="productMap">
+    SELECT * FROM type t, category c,product p WHERE t.typeid = c.typeid and p.category_id = c.category_id and c.typeid = #{typeId}
+  </select>
+</mapper>

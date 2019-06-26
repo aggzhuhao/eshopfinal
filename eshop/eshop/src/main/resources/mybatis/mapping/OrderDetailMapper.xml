@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhuhao.eshop.mapper.OrderDetailMapper" >
+  <resultMap id="BaseResultMap" type="com.zhuhao.eshop.entity.OrderDetail" >
+    <id column="order_detail_id" property="orderDetailId" jdbcType="INTEGER" />
+    <result column="order_id" property="orderId" jdbcType="INTEGER" />
+    <result column="product_id" property="productId" jdbcType="INTEGER" />
+    <result column="quantity" property="quantity" jdbcType="INTEGER" />
+    <result column="description" property="description"  />
+    <result column="price" property="price" />
+  </resultMap>
+  <insert id="insertOrderDetail" parameterType="com.zhuhao.eshop.entity.OrderDetail">
+    INSERT INTO `order_detail` VALUES(#{orderDetailId} , #{orderId}, #{productId}, #{quantity})
+  </insert>
+  <select id="selectorderdetailByorderId" parameterType="com.zhuhao.eshop.entity.Order" resultMap="BaseResultMap">
+    SELECT o.*,p.description,p.price FROM `order_detail` o, `product` p where o.order_id = #{orderId} and p.product_id = o. product_id;
+  </select>
+</mapper>

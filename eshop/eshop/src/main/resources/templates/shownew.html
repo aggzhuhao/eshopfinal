@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>新品展示</title>
+    <link  type="text/css" th:href="@{css/bootstrap.min.css}" rel="stylesheet">
+    <link type="text/css" th:href="@{css/style.css}" rel="stylesheet">
+    <link type="text/css" th:href="@{css/font-awesome.min.css}" rel="stylesheet">
+    <script type="text/javascript" th:src="@{js/jquery-1.11.3.js}"></script>
+    <script type="text/javascript" th:src="@{js/bootstrap.min.js}"></script>
+    <script type="text/javascript" data-main="js/main" th:src="@{js/require.js}"></script>
+</head>
+<body>
+<div class="top">
+    <div class="container">
+        <div class="pull-left top-text">
+            <span th:if="${#session?.getAttribute('user')} != null">Hi～亲爱的[(${#session.getAttribute("user")?.username})]</span>
+            <a th:if="${#session?.getAttribute('user')}  == null" th:href="@{/login}">登录</a>
+            <a th:if="${#session?.getAttribute('user')}  == null" th:href="@{/register}">注册</a>
+            <a th:if="${#session?.getAttribute('user')}  != null" th:href="@{/removeuser}">注销</a>
+        </div>
+        <div th:if="${#session?.getAttribute('user')}  != null" class="pull-right user-info">
+            <div class="top-group" style="cursor: pointer">
+                我的账户 <i class="icon-angle-down"></i>
+                <div class="user-menu">
+                    <a href="/article/zhuceyonghu">注册新用户</a></li>
+                    <a href="/article/xieyi">用户协议</a></li>
+                    <a href="/article/xiugaixinxi">修改信息</a></li>
+                </div>
+            </div>
+            <div class="top-group"><a href="orderlist"><i class="icon-reorder"></i>我的订单</a></div>
+            <div class="top-group"><a id="tocart" href="javascript:void(0)"><i class="icon-shopping-cart"></i>购物车</a></div>
+        </div>
+    </div>
+</div>
+<div class="header">
+    <div class="container">
+        <div class="logo pull-left">
+            <a href="#">
+                <img src="images/logo.png" width="250px" height="100px" >
+            </a>
+        </div>
+        <div class="nav-menu pull-left">
+            <ul class="nav navbar-nav">
+                <li ><a href="/index">首页</a></li>
+                <li ><a href="/shownew">每周新品预售</a></li>
+                <li><a href="/discount">限时打折</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="main">
+
+    <!--幻灯片-->
+    <div class="container">
+        <div class="category">
+            <div class="category-title"><h5>新品展示</h5></div>
+            <div class="list">
+                <div th:each="type : ${#session.getAttribute('typelist')}" class="cate-list">
+                    <p class="max-title"><a th:text="${type.name}" style="cursor:pointer" name="product"></a></p>
+                    <ul>
+                        <li th:each="category : ${type.categoryList}">
+                            <a th:text="${category?.name}" th:href="@{'/selectCategoryId/'+${category.categoryId}}"></a>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+        <div class="category-item">
+            <div class="item-title">
+                <h3><i class="icon-th-large"></i>新品展示</h3>
+            </div>
+            <div class="item-lits">
+                <ul id="ull">
+
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="container">
+                <div class="footer-group pull-left">
+                    <ul class="footer-list">
+                        <li class="top-title"><span>新手指南</span></li>
+                        <li><a href="/article/zhuceyonghu">注册新用户</a></li>
+                        <li><a href="/article/xieyi">用户协议</a></li>
+                        <li><a href="/article/xiugaixinxi">修改信息</a></li>
+                    </ul>
+                    <ul class="footer-list">
+                        <li class="top-title"><span>购物指南</span></li>
+                        <li><a href="/article/gouwuliucheng">购物流程</a></li>
+                    </ul>
+                    <ul class="footer-list">
+                        <li class="top-title"><span>购物车</span></li>
+                        <li><a href="/article/gouwucheshuoming">购物车说明</a></li>
+                    </ul>
+                </div>
+                <div class="footer-group pull-right">
+                    <div class="contact">
+                        <img src="images/contact.jpg">
+                    </div>
+                    <p>监督：1038334827</p>
+                    <p> 在线客服</p>
+                </div>
+                <div class="copy-right">
+                    <p><span>CopyRight © 2018-2019 127.0.0.1:8080 right to zh</span></p>
+                </div>
+            </div>
+        </div>
+        <div class="sticky">
+            <div><a href="#" title="返回顶部"><i class="icon-angle-up"></i></a></div>
+        </div>
+        <!--置顶-->
+</body>
+<script>
+    $(function(){
+        //留着
+
+
+            $.ajax({
+                url:"getnewProducts",
+                type:"post",
+                success:function(data){
+                    $("#ull li").remove();
+                    $("#getProduct").empty();
+
+                    /*$.each(data,function(index,product){
+                        console.log(product.price)
+                        $("#ull").append(
+                    "<li> <a href='#'> <img src='"+product.imgpath+"'/> " +
+                        "<p>"+product.description+"</p> " +
+                        "<p><span>￥"+product.price+"</span></p> " +
+                        "</a> </li>"
+                    )})*/
+                    $.each(data,function(index,product){
+                        $("#ull").append(`
+                            <li id="${product.productId}" name="${product.categoryId}"> <a href='#'> <img src='${product.imgpath}'/>
+                            <p>${product.description}</p>
+                            <p><span>￥${product.price}</span>
+                            </p>
+                            </a> </li>`
+                        )
+
+                    })
+
+                },complete:function(){
+                    $("#ull li").click(function(){
+                        window.location.href="getproductById/"+$(this).attr("id")+"/"+$(this).attr("name");
+                    })
+                }
+            })
+        $("#ull li").click(function(){
+            window.location.href="getproductById/"+$(this).attr("id")+"/"+$(this).attr("name");
+
+        })
+
+
+        $("#tocart").click(function () {
+            window.location.href="/selectAllshoppingCartInproduct";
+        })
+    })
+</script>
+</html>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhuhao.eshop.mapper.OrderMapper" >
+  <resultMap id="BaseResultMap" type="com.zhuhao.eshop.entity.Order" >
+    <id column="order_id" property="orderId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime"  />
+    <result column="amount" property="amount" jdbcType="REAL" />
+    <result column="parment" property="parment" jdbcType="INTEGER" />
+    <result column="peceiver" property="peceiver" jdbcType="VARCHAR" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="country" property="country" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="zipcode" property="zipcode" jdbcType="VARCHAR" />
+    <result column="telphone" property="telphone" jdbcType="VARCHAR" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+    <result column="startnumber" property="startnumber" />
+    <result column="endnumber" property="endnumber" />
+  </resultMap>
+  <insert id="insertOrder" useGeneratedKeys="true" keyProperty="orderId" parameterType="com.zhuhao.eshop.entity.Order">
+   INSERT INTO `order` VALUES (#{orderId}, #{createTime}, #{amount}, #{parment}, #{peceiver}, #{province}, #{city}, #{country}, #{address}, #{zipcode}, #{telphone}, #{username});
+  </insert>
+  <select id="getOrderlistAjaxlimit" parameterType="com.zhuhao.eshop.entity.Order" resultMap="BaseResultMap">
+    SELECT * FROM `order` where username = #{username} ORDER BY create_time DESC LIMIT #{startnumber} ,#{endnumber} ;
+  </select>
+  <select id="getOrderlistAjaxCount" parameterType="com.zhuhao.eshop.entity.Order" resultType="int">
+    SELECT COUNT(*) FROM `order` where username = #{username};
+  </select>
+  <select id="getorderdetailById" parameterType="com.zhuhao.eshop.entity.Order" resultMap="BaseResultMap">
+    SELECT * FROM `order` where order_id = #{orderId}
+  </select>
+  <select id="selectorders" parameterType="com.zhuhao.eshop.entity.User" resultMap="BaseResultMap">
+    SELECT * FROM `order` where username = #{username} ORDER BY create_time DESC
+  </select>
+</mapper>

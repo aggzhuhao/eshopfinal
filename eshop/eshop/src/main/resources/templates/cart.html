@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>购物车</title>
+    <link  type="text/css" href="css/bootstrap.min.css" rel="stylesheet">
+    <link type="text/css" href="css/style.css" rel="stylesheet">
+    <link type="text/css" href="css/font-awesome.min.css" rel="stylesheet">
+    <script type="text/javascript" src="js/jquery-1.11.3.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" data-main="js/main" src="js/require.js"></script>
+</head>
+<body>
+<div class="top">
+    <div class="container">
+        <div class="pull-left top-text">
+            <span th:if="${#session?.getAttribute('user')} != null">Hi～亲爱的[(${#session.getAttribute("user")?.username})]</span>
+            <a th:if="${#session?.getAttribute('user')}  == null" th:href="@{/login}">登录</a>
+            <a th:if="${#session?.getAttribute('user')}  == null" th:href="@{/register}">注册</a>
+            <a th:if="${#session?.getAttribute('user')}  != null" th:href="@{/removeuser}">注销</a>
+        </div>
+        <div th:if="${#session?.getAttribute('user')}  != null" class="pull-right user-info">
+            <div class="top-group" style="cursor: pointer">
+                我的账户 <i class="icon-angle-down"></i>
+                <div class="user-menu">
+                    <a href="/article/zhuceyonghu">注册新用户</a></li>
+                    <a href="/article/xieyi">用户协议</a></li>
+                    <a href="/article/xiugaixinxi">修改信息</a></li>
+                </div>
+            </div>
+            <div class="top-group"><a href="orderlist"><i class="icon-reorder"></i>我的订单</a></div>
+            <div class="top-group"><a id="tocart" href="javascript:void(0)"><i class="icon-shopping-cart"></i>购物车</a></div>
+        </div>
+    </div>
+</div>
+<div class="header">
+    <div class="container">
+        <div class="logo pull-left">
+            <a href="#">
+                <img src="images/logo.png" width="250px" height="100px" >
+            </a>
+        </div>
+        <div class="nav-menu pull-left">
+            <ul class="nav navbar-nav">
+                <li ><a href="/index">首页</a></li>
+                <li ><a href="/shownew">每周新品预售</a></li>
+                <li><a href="/discount">限时打折</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="main">
+  <div class="container">
+  <div class="cart">
+    <div class="cart-mark">
+      <div class="pull-left">
+      </div>
+      <div class="pull-right">
+          <div class="cart-process">
+              <div class="line"></div>
+              <div class="process-item">
+                  <div class="active">1</div>
+                  <p>购物车</p>
+              </div>
+              <div class="process-item ">
+                  <div>2</div>
+                  <p>确认订单</p>
+              </div>
+              <div class="process-item">
+                  <div >3</div>
+                  <p>订单列表</p>
+              </div>
+          </div>
+      </div>
+  </div>
+    <div class="cart-box">
+        <!--<-->
+        <div id="content" class="float_r" th:if="${#lists.size(session.cartlist)} != 0">
+            <h1>购物车</h1>
+            <table width="1130px" cellspacing="0" cellpadding="5" style="word-break: break-all; word-wrap: break-word;border-collapse:separate; border-spacing:0px 10px;">
+                <tr bgcolor="#ddd" id="trtrtr">
+                    <th width="330" align="left">图片 </th>
+                    <th width="230" align="left">商品描述 </th>
+                    <th width="100" align="center">数量 </th>
+                    <th width="100" align="right">价格 </th>
+                    <th width="100" align="right">小计 </th>
+                    <th width="90"> </th>
+
+                </tr>
+
+
+                <tr>
+
+                    <td colspan="3" align="right"  height="30px"></td>
+                    <td align="right" style="background:#ddd; font-weight:bold"> 合计 </td>
+                    <td id="count" align="right" style="background:#ddd; font-weight:bold"></td>
+                    <td style="background:#ddd; font-weight:bold"> </td>
+                </tr>
+
+            </table>
+            <div style="float:right; width: 215px; margin-top: 20px;">
+                <div style="float: right" id="jiesuan"><a style="width: 100px;height: 35px" class="btn btn-block" href="#">结算</a></div><br/><br/>
+                <div style="float: right" id="jixugouwu"><a  style="width: 100px;height: 35px;" class="btn btn-block" href="#">继续购物</a></div>
+
+
+            </div>
+        </div>
+        <div id="noshoppingcart"  class="cart-img">
+            <div><i class="icon-shopping-cart"></i></div>
+            <p>您的购物车为空，去挑选您的商品吧。</p>
+            <a class="btn btn-block" href="#">去逛逛</a>
+        </div>
+
+    </div>
+  </div>
+  </div>
+</div>
+<div class="footer">
+    <div class="container">
+        <div class="footer-group pull-left">
+            <ul class="footer-list">
+                <li class="top-title"><span>新手指南</span></li>
+                <li><a href="/article/zhuceyonghu">注册新用户</a></li>
+                <li><a href="/article/xieyi">用户协议</a></li>
+                <li><a href="/article/xiugaixinxi">修改信息</a></li>
+            </ul>
+            <ul class="footer-list">
+                <li class="top-title"><span>购物指南</span></li>
+                <li><a href="/article/gouwuliucheng">购物流程</a></li>
+            </ul>
+            <ul class="footer-list">
+                <li class="top-title"><span>购物车</span></li>
+                <li><a href="/article/gouwucheshuoming">购物车说明</a></li>
+            </ul>
+        </div>
+        <div class="footer-group pull-right">
+            <div class="contact">
+                <img src="images/contact.jpg">
+            </div>
+            <p>监督：1038334827</p>
+            <p> 在线客服</p>
+        </div>
+        <div class="copy-right">
+            <p><span>CopyRight © 2018-2019 127.0.0.1:8080 right to zh</span></p>
+        </div>
+    </div>
+</div>
+<div class="sticky">
+    <div><a href="#" title="返回顶部"><i class="icon-angle-up"></i></a></div>
+</div>
+<!--置顶-->
+</body>
+<script>
+
+
+    $(function () {
+        var count = 0;
+        var productidandquantity = "";
+        $.ajax({
+            url:"/ajaxgetCarlist",
+            success:function (data) {
+                if (data.length != 0){
+                    $("#noshoppingcart").css("display","none");
+                        $.each(data, function (index, productcart) {
+
+                            $("#trtrtr").after(
+                                `
+                     <tr>
+
+                        <td width="330" align="left"><img width="280" height="170" src="${productcart.imgpath}" alt="" /></td>
+                        <td width="230" align="left" >${productcart.description}</td>
+                        <td  width="100" align="center" >
+                            <div class="info-value">
+                                <div class="item-text">
+                                    <span class="num-text"></span>
+                                    <div class="mete">
+                                        <a name="subtract" id="subtract"href="javascript:void(0)">-</a>
+                                        <span name="number1" id="number" class="number">${productcart.cartnumber}</span>
+                                        <a name="subjoin" id="subjoin" href="javascript:void(0)">+</a>
+                                    </div>
+                                    <p class="num-text" id="stock"><span style="display:none;">${productcart.stocknumber}</span><span name="productid1" style="display:none;">${productcart.productId}</span></p>
+                                </div>
+                            </div>
+                        </td>
+                        <td width="100" align="left">￥${productcart.price} </td>
+                        <td name="xiaoji" width="100" align="left">￥${productcart.price * productcart.cartnumber}</td>
+                        <td width="90" align="center"><img name="removeShoppingcartByID" id="${productcart.shoppingcartid}" src="images/remove_x.png" alt="remove" /></td>
+                    </tr>&nbsp
+                            `
+                            );
+                            count += productcart.cartnumber * productcart.price;
+
+                            productidandquantity += "productid:" + productcart.productId + ",quantity:" + productcart.cartnumber + ";"
+                        })
+                    productidandquantity = productidandquantity.substr(0, productidandquantity.length - 1);
+                    //console.log(productidandquantity)
+                }else{
+                    $("#content").css("display","none");
+                }
+            },complete:function () {
+                /*
+                * 这是 -
+                */
+                $("[name='subtract']").click(function(){
+                    var cartnumber = ($(this).next())[0].innerHTML;
+                    //console.log("cart数量 :"+cartnumber);
+                    var stock = ((($(this).parent(1)).next()).children())[0].innerHTML;
+                    //console.log("库存数量"+stock);
+                    if( Number(cartnumber) <= 1) {
+                        alert("购买数量最低不能少于1");
+                        ($(this).next()).text("1");
+                    }else{
+                        cartnumber=String(Number(cartnumber)-1);
+                        ($(this).next()).text(cartnumber);
+                        var xiaoji = ($(this).parent().parent().parent().parent().next().next());
+                        var price = ($(this).parent().parent().parent().parent().next()).text();
+                        var removeshoppingcart = $(this).parent().parent().parent().parent().next().next().next().children();
+                        var shoppingcartid = removeshoppingcart.attr("id");
+                        price = price.substr(1);
+                        var total = price * cartnumber;
+                        total = Math.round(total*10)/10
+                        xiaoji.text("￥"+total);
+                        $.ajax({
+                            url:"updateShopcartByCartId",
+                            data:{
+                                "cartnumber":cartnumber,
+                                "shoppingcartid":shoppingcartid,
+                            },
+                            success:function (data) {
+                                if(data == 0){
+                                    alert("修改失败");
+                                }
+                            }
+                        })
+                        var countresult = 0;
+                        for(var i = 0; i <$("[name='xiaoji']").length;i++){
+                            countresult += Number(($("[name='xiaoji']")[i].innerHTML).substr(1));
+                        }
+                        $("#count").text(Math.round(countresult*10)/10);
+                    }
+                }) //---
+                /*
+                 * 这是 +
+                 */
+                $("[name='subjoin']").click(function(){
+                    var cartnumber = ($(this).prev())[0].innerHTML;
+                    var stock = ((($(this).parent(1)).next()).children())[0].innerHTML;
+
+                    if( Number(cartnumber) >= Number(stock)) {
+                        alert("购买数量已经超出库存");
+                    }else{
+                        cartnumber=String(Number(cartnumber)+1);
+                        ($(this).prev()).text(cartnumber);
+                        var xiaoji = ($(this).parent().parent().parent().parent().next().next());
+                        var price = ($(this).parent().parent().parent().parent().next()).text();
+                        var removeshoppingcart = $(this).parent().parent().parent().parent().next().next().next().children();
+                        var shoppingcartid = removeshoppingcart.attr("id");
+                        price = price.substr(1);
+                        var total = price * cartnumber;
+                        total = Math.round(total*10)/10
+                        xiaoji.text("￥"+total);
+                        $.ajax({
+                            url:"updateShopcartByCartId",
+                            data:{
+                                "cartnumber":cartnumber,
+                                "shoppingcartid":shoppingcartid,
+                            },
+                            success:function (data) {
+                                if(data == 0){
+                                    alert("修改失败");
+                                }
+                            }
+                        })
+                        var countresult = 0;
+                        for(var i = 0; i <$("[name='xiaoji']").length;i++){
+                            countresult += Number(($("[name='xiaoji']")[i].innerHTML).substr(1));
+                        }
+                        $("#count").text(Math.round(countresult*10)/10);
+
+
+                    }
+                }) //---
+
+                $("[name='removeShoppingcartByID']").click(function () {
+                    var shoppingcartid = $(this).attr("id");
+                    $.ajax({
+                        url:"removeShoppingcartByID",
+                        data:{
+                            "shoppingcartid":shoppingcartid
+                        },
+                        success:function(data){
+                            location.reload();
+                        },error:function () {
+                            alert("删除失败");
+                        }
+
+                    })
+                }) // --
+
+                $("#count").text(Math.round(count*10)/10);
+                $("#jiesuan").click(function () {
+                    var productidandquantity = "";
+                    for(var i = 0; i <$("[name='number1']").length;i++){
+                        productidandquantity+= "productid:"+($("[name='productid1']")[i].innerHTML)+",quantity:"+($("[name='number1']")[i].innerHTML)+"-"
+                    }
+                    productidandquantity = productidandquantity.substr(0,productidandquantity.length-1);
+                    count = $("#count").text();
+                    window.location.href="/clearshoppingcart/"+productidandquantity+"/"+count;
+                })
+            }
+        })//ajax
+
+
+        $("#tocart").click(function () {
+            window.location.href="/selectAllshoppingCartInproduct";
+        })
+        $("#jixugouwu").click(function () {
+            window.location.href="/index";
+
+        })
+        $("#noshoppingcart").click(function () {
+            window.location.href="/index";
+        })
+    })
+</script>
+</html>

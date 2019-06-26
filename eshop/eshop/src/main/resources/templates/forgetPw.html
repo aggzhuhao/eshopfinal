@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <link  type="text/css" href="css/bootstrap.min.css" rel="stylesheet">
+    <link type="text/css" href="css/style.css" rel="stylesheet">
+    <link type="text/css" href="css/font-awesome.min.css" rel="stylesheet">
+    <script type="text/javascript" src="js/jquery-1.11.3.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" data-main="js/main" src="js/require.js"></script>
+</head>
+<body>
+<div class="top">
+    <div class="container">
+        <div class="pull-left top-text">
+            <span th:if="${#session?.getAttribute('user')} != null">Hi～亲爱的[(${#session.getAttribute("user")?.username})]</span>
+            <a th:if="${#session?.getAttribute('user')}  == null" th:href="@{/login}">登录</a>
+            <a th:if="${#session?.getAttribute('user')}  == null" th:href="@{/register}">注册</a>
+            <a th:if="${#session?.getAttribute('user')}  != null" th:href="@{/removeuser}">注销</a>
+        </div>
+        <div th:if="${#session?.getAttribute('user')}  != null" class="pull-right user-info">
+            <div class="top-group" style="cursor: pointer">
+                我的账户 <i class="icon-angle-down"></i>
+                <div class="user-menu">
+                    <a href="/article/zhuceyonghu">注册新用户</a></li>
+                    <a href="/article/xieyi">用户协议</a></li>
+                    <a href="/article/xiugaixinxi">修改信息</a></li>
+                </div>
+            </div>
+            <div class="top-group"><a href="orderlist"><i class="icon-reorder"></i>我的订单</a></div>
+            <div class="top-group"><a id="tocart" href="javascript:void(0)"><i class="icon-shopping-cart"></i>购物车</a></div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="login">
+        <div class="logo">
+            <a href="#">
+                <img src="images/logo.png" width="250px" height="100px">
+            </a>
+             <div class="logo-text"><h3><b>忘记密码</b></h3></div>
+        </div>
+
+        <div id="login-form" class="login-form ">
+
+                <div class="form-group">
+                    <i class="icon-user"></i>
+                    <input type="text" id="emailstr" name="email" class="form-control" placeholder="邮箱"/>
+                </div>
+                <div class="form-group">
+                    <table>
+                        <tr>
+                            <td>
+                                <i class="icon-lock"></i>
+                                <input type="text" name="checkcode" id="checkcode" class="form-control" style="width:200px" placeholder="输入验证码"/>
+                            </td>
+                            <td style="text-align:right;vertical-align:middle;">
+                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                <button id="feachBtn" type="button" class="" style=" width:150px;height: 45px" th:align="right">获取验证码</button>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <p id="yanzm" style="color:red"></p>
+                </div>
+                <div class="form-group">
+                    <button id="submit1" class="btn btn-block" >立即验证</button>
+                </div>
+
+                <div class="form-group">
+                    <h5>没有帐号？<a href="/register">立即注册 </a></h5>
+                </div>
+                <div class="form-group">
+                    <h5><a href="/index">返回首页</a></h5>
+                </div>
+        </div>
+    </div>
+</div>
+<div class="footer">
+    <div class="container">
+        <div class="footer-group pull-left">
+            <ul class="footer-list">
+                <li class="top-title"><span>新手指南</span></li>
+                <li><a href="/article/zhuceyonghu">注册新用户</a></li>
+                <li><a href="/article/xieyi">用户协议</a></li>
+                <li><a href="/article/xiugaixinxi">修改信息</a></li>
+            </ul>
+            <ul class="footer-list">
+                <li class="top-title"><span>购物指南</span></li>
+                <li><a href="/article/gouwuliucheng">购物流程</a></li>
+            </ul>
+            <ul class="footer-list">
+                <li class="top-title"><span>购物车</span></li>
+                <li><a href="/article/gouwucheshuoming">购物车说明</a></li>
+            </ul>
+        </div>
+        <div class="footer-group pull-right">
+            <div class="contact">
+                <img src="images/contact.jpg">
+            </div>
+            <p>监督：1038334827</p>
+            <p> 在线客服</p>
+        </div>
+        <div class="copy-right">
+            <p><span>CopyRight © 2018-2019 127.0.0.1:8080 right to zh</span></p>
+        </div>
+    </div>
+</div>
+<div class="sticky">
+    <div><a href="#" title="返回顶部"><i class="icon-angle-up"></i></a></div>
+</div>
+<!--置顶-->
+</body>
+<script>
+    $(function () {
+        var email = "";
+
+        $("#feachBtn").click(function () {
+            var reg = new RegExp("^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$");
+            if($("#emailstr").val() === ""){
+                alert("邮箱不得为空!");
+            }else if(!reg.test($("#emailstr").val())){
+                alert("请输入正确的邮箱格式")
+            }else{
+                if( $("#feachBtn").text() == "获取验证码"){
+                    email = $("#emailstr").val();
+                    var time = 60;
+                    var timer = setInterval(function(){
+                        time--;
+                        $("#feachBtn").text(time+" 秒后可重新获取");
+                        if(time==0){
+                            clearInterval(timer);
+                            $("#feachBtn").text("获取验证码");
+                        }
+                    },1000);
+
+                    $.ajax({
+                        url:"sendEmail",
+                        data:{
+                            emailstr:$("#emailstr").val()
+                        },
+                        success:function (data) {
+                            console.log(data);
+                        }
+
+                    })
+                }
+            }
+
+        });
+
+        $("#submit1").click(function () {
+            $.ajax({
+
+
+                url:"checkmailCode",
+                data:{
+                    checkcode:$("#checkcode").val()
+                },
+                success:function (data) {
+                    if(true == data){
+                        $("#login-form").empty();
+                        $("#login-form").append(
+                            `
+                                <div class="register-form ">
+                                    <div class="form-group">
+                                        <i class="icon-key"></i>
+                                        <input type="password" id="passwordxiugai" name="passwordxiugai" class="form-control" placeholder="请输入新密码"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <i class="icon-lock"></i>
+                                        <input type="password" id="passwordxiugai1" name="passwordxiugai" class="form-control" placeholder="确认密码"/>
+                                    </div>
+                                    <label id="checkpasskong" style="color: red"></label>
+                                    <div class="form-group">
+                                        <button id="commitxiugai" type="button" class="btn btn-block">立即修改</button>
+                                    </div>
+
+                            </div>
+
+
+                            `
+                        )
+                    }else {
+                        $("#yanzm").text("验证码不正确！");
+                    }
+                },complete:function () {
+                    $("#passwordxiugai").click(function () {
+                        $("#checkpasskong").text("");
+                    })
+                    $("#commitxiugai").click(function () {
+
+                        var value01 = $("#passwordxiugai").val();
+                        var value02 = $("#passwordxiugai1").val();
+                        if(value01 == ""){
+                            $("#checkpasskong").text("新密码不得为空");
+                        }else if(value01 != value02){
+                            $("#checkpasskong").text("两次输入的密码 不一致");
+                        }else{
+                            $.ajax({
+                                url:"forgetmailpassword",
+                                data:{
+                                    password:value01,
+                                    mail:email
+                                },
+                                success:function (data) {
+                                    if(data == true){
+                                        alert("修改密码成功！")
+                                        window.location.href = "login";
+                                    }else{
+                                        alert("修改失败！")
+                                    }
+                                },error:function () {
+                                    alert("出错了！")
+                                }
+                            })
+                        }
+                    })
+                },
+                error:function () {
+                    alert("出错了！");
+                }
+
+            })
+        })
+
+
+    })
+
+
+</script>
+</html>

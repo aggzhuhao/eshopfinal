@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>添加商品</title>
+    <link  type="text/css" th:href="@{css/bootstrap.min.css}" rel="stylesheet">
+    <link type="text/css" th:href="@{css/style.css}" rel="stylesheet">
+    <link type="text/css" th:href="@{css/font-awesome.min.css}" rel="stylesheet">
+    <script type="text/javascript" th:src="@{js/jquery-1.11.3.js}"></script>
+    <script type="text/javascript" th:src="@{js/bootstrap.min.js}"></script>
+    <script type="text/javascript" data-main="js/main" th:src="@{js/require.js}"></script>
+    <style>
+        #btn{
+            padding: 5px 10px;
+            background: #00b0f0;
+            color: #FFF;
+            border: none;
+            border-radius: 5px;
+        }
+
+        #filelabel{
+            position: relative;
+        }
+        #fileinp{
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+        }
+        #btn{
+            margin-right: 5px;
+        }
+        #text{
+            color: red;
+        }
+
+        div {
+            position: relative;
+            line-height: 30px;
+        }
+
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            opacity: 0;
+        }
+
+        [name="itemlabel"] {
+            position: absolute;
+            left: 5px;
+            top: 8px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 1px solid #999;
+        }
+
+        /*设置选中的input的样式*/
+        /* + 是兄弟选择器,获取选中后的label元素*/
+        input:checked+label {
+            background-color: #006eb2;
+            border: 1px solid #006eb2;
+        }
+
+        input:checked+label::after {
+            position: absolute;
+            content: "";
+            width: 5px;
+            height: 10px;
+            top: 3px;
+            left: 6px;
+            border: 2px solid #fff;
+            border-top: none;
+            border-left: none;
+            transform: rotate(45deg)
+        }
+    </style>
+</head>
+<body>
+<div class="top">
+    <div class="container">
+        <div class="pull-left top-text">
+            <span th:if="${#session?.getAttribute('admin')} != null">Hi～亲爱的管理员[(${#session.getAttribute("admin")?.username})]</span>
+            <a th:if="${#session?.getAttribute('admin')}  != null" th:href="@{/removeadmin}">注销</a>
+        </div>
+    </div>
+</div>
+<div class="header">
+    <div class="container">
+        <div class="nav-menu pull-left">
+            <ul class="nav navbar-nav">
+                <li ><a href="adminindex">管理员操作首页</a></li>
+                <li ><a href="insertproduct">新增商品</a></li>
+                <li ><a href="inserttypet">新增分类</a></li>
+                <li ><a href="insertcategory">新增类型</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="main">
+
+    <div class="container">
+        <div class="category-item">
+            <div class="item-title">
+                <h3><i class="icon-th-large"></i>新增商品</h3>
+            </div>
+
+            <div class="register-form ">
+                <form id="productform" name="productform" class="form-horizontal" method="post" action="/insertproductaction" enctype="multipart/form-data">
+                    <div id="divtypeselect" class="form-group">
+                        <select id="typeselect" >
+                            <option th:each="type : ${#session.getAttribute('typelistinsert')}" th:value="${type.typeId}">[(${type.name})]</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <select id="categoryselect" name="categoryId">
+
+                        </select>
+                    </div>
+
+
+                    <div class="form-group">
+                        <input id="description" type="text" name="description" class="form-control" placeholder="商品名称"/>
+                    </div>
+                    <div class="form-group">
+                        <input name="price" class="form-control" placeholder="价格"/>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="feature" class="form-control" placeholder="详细说明"/>
+                    </div>
+
+                    <div class="form-group">
+
+                    <div>
+                        <input id="item1" name="novaltyStatus" type="checkbox"  value="1" checked>
+                        <label name="itemlabel" for="item1"></label>
+                        <span style="margin-left: 10px">是否新品</span>
+                    </div>
+                    <div>
+                        <input id="item2" type="checkbox" name="dicount" value="1">
+                        <label name="itemlabel" for="item2"></label>
+                        <span style="margin-left: 10px">是否打折</span>
+                    </div>
+                    </div>
+                    <div class="form-group">
+                        <input id="quantity" type="text"  name="quantity" class="form-control checkcode" placeholder="库存数量"/>
+                        <div class="pull-left"><div id="v_container" style="width: 150px;height: 50px;"></div>
+                        <br>
+                        </div>
+                            <label id="filelabel" for="fileinp">
+                                <input type="button" id="btn" value="上传图片"><span id="text"></span>
+                                <input type="file" id="fileinp" name="fileinp">
+                            </label>
+
+                    </div>
+                    <div class="form-group">
+                        <button id="commit" type="button" class="btn btn-block">添加商品</button>
+                    </div>
+                        <h5><a href="javascript:history.back()">返回</a></h5>
+                </form>
+            </div>
+
+        <div class="sticky">
+            <div><a href="#" title="返回顶部"><i class="icon-angle-up"></i></a></div>
+        </div>
+        <!--置顶-->
+</body>
+<script>
+    $(function () {
+
+        $("#fileinp").change(function () {
+            $("#text").html($("#fileinp").val());
+
+            var data = new FormData();
+            var imgdata = document.productform.fileinp.files[0];
+            data.append('data',imgdata)
+            $.ajax({
+                url:"/huixianpic",
+                type:"post",
+                cache: false,
+                processData: false,
+                contentType: false,
+                data:data,
+                success:function (data) {
+                    $("#huixianpic").remove();
+                    $("#filelabel").append(
+                        `
+                        <img id="huixianpic" style="width: 400px;height: 300px" src="${data}">
+                        `
+                    )
+                }
+            })
+
+        })
+
+        $("#commit").click(function () {
+            $("#productform").submit();
+        })
+
+
+        $("#typeselect").change(function () {
+            $.ajax({
+                url:"getcategoryname",
+                data:{
+                    typeId:$("#typeselect option:selected").val()
+                },
+                success:function (data) {
+                    $("#categoryselect").empty();
+                    $.each(data,function (index,category) {
+                        $("#categoryselect").append(
+                            `
+                        <option value="${category.categoryId}">${category.name}</option>
+                        `
+                        )
+                    })
+                }
+            })
+        })
+        $.ajax({
+            url:"getcategoryname",
+            data:{
+                typeId:$("#typeselect option:selected").val()
+            },
+            success:function (data) {
+                $("#categoryselect").empty();
+                $.each(data,function (index,category) {
+                    $("#categoryselect").append(
+                        `
+                        <option value="${category.categoryId}">${category.name}</option>
+                        `
+                    )
+                })
+            }
+        })
+
+    })
+
+
+</script>
+</html>

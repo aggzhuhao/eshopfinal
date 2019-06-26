@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhuhao.eshop.mapper.StockMapper" >
+  <resultMap id="stockMap" type="com.zhuhao.eshop.entity.Stock" >
+    <id column="stock_id" property="stockId" jdbcType="INTEGER" />
+    <result column="product_id" property="productId" jdbcType="INTEGER" />
+    <result column="quantity" property="quantity" jdbcType="BIGINT" />
+  </resultMap>
+  <select id="selectStockByPId" parameterType="com.zhuhao.eshop.entity.Product" resultMap="stockMap">
+    SELECT * FROM stock where product_id = #{productId}
+  </select>
+  <update id="updateStockByproductId" parameterType="com.zhuhao.eshop.entity.Product">
+    UPDATE STOCK SET quantity = (quantity - #{categoryId}) where product_id = #{productId}
+  </update>
+
+  <insert id="insertstockp" parameterType="com.zhuhao.eshop.entity.Stock">
+    insert into `stock` VALUES(#{stockId},#{productId},#{quantity});
+  </insert>
+
+  <delete id="deletestock" parameterType="com.zhuhao.eshop.entity.Stock">
+    DELETE FROM `stock` WHERE stock_id = #{stockId}
+  </delete>
+
+  <update id="updatestock" parameterType="com.zhuhao.eshop.entity.Stock">
+    UPDATE `stock` set quantity = #{quantity} where stock_id = #{stockId}
+  </update>
+</mapper>

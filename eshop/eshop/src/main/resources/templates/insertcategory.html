@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>新增类型</title>
+    <link  type="text/css" th:href="@{css/bootstrap.min.css}" rel="stylesheet">
+    <link type="text/css" th:href="@{css/style.css}" rel="stylesheet">
+    <link type="text/css" th:href="@{css/font-awesome.min.css}" rel="stylesheet">
+    <script type="text/javascript" th:src="@{js/jquery-1.11.3.js}"></script>
+    <script type="text/javascript" th:src="@{js/bootstrap.min.js}"></script>
+    <script type="text/javascript" data-main="js/main" th:src="@{js/require.js}"></script>
+    <style>
+        #btn{
+            padding: 5px 10px;
+            background: #00b0f0;
+            color: #FFF;
+            border: none;
+            border-radius: 5px;
+        }
+
+        #filelabel{
+            position: relative;
+        }
+        #fileinp{
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+        }
+        #btn{
+            margin-right: 5px;
+        }
+        #text{
+            color: red;
+        }
+
+        div {
+            position: relative;
+            line-height: 30px;
+        }
+
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            opacity: 0;
+        }
+
+        [name="itemlabel"] {
+            position: absolute;
+            left: 5px;
+            top: 8px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 1px solid #999;
+        }
+
+        /*设置选中的input的样式*/
+        /* + 是兄弟选择器,获取选中后的label元素*/
+        input:checked+label {
+            background-color: #006eb2;
+            border: 1px solid #006eb2;
+        }
+
+        input:checked+label::after {
+            position: absolute;
+            content: "";
+            width: 5px;
+            height: 10px;
+            top: 3px;
+            left: 6px;
+            border: 2px solid #fff;
+            border-top: none;
+            border-left: none;
+            transform: rotate(45deg)
+        }
+    </style>
+</head>
+<body>
+<div class="top">
+    <div class="container">
+        <div class="pull-left top-text">
+            <span th:if="${#session?.getAttribute('admin')} != null">Hi～亲爱的管理员[(${#session.getAttribute("admin")?.username})]</span>
+            <a th:if="${#session?.getAttribute('admin')}  != null" th:href="@{/removeadmin}">注销</a>
+        </div>
+    </div>
+</div>
+<div class="header">
+    <div class="container">
+        <div class="nav-menu pull-left">
+            <ul class="nav navbar-nav">
+                <li ><a href="adminindex">管理员操作首页</a></li>
+                <li ><a href="insertproduct">新增商品</a></li>
+                <li ><a href="inserttypet">新增分类</a></li>
+                <li ><a href="insertcategory">新增类型</a></li>
+            </ul>
+        </div>
+
+    </div>
+</div>
+<div class="main">
+
+    <div class="container">
+        <div class="category-item">
+            <div class="item-title">
+                <h3><i class="icon-th-large"></i>新增类型</h3>
+            </div>
+
+            <div class="register-form ">
+                <form id="productform" class="form-horizontal" >
+
+            </div>
+
+            <!--<div th:each="type : ${#session.getAttribute('typelist')}" class="cate-list">
+                <p class="max-title"><a th:text="${type.name}" style="cursor:pointer" name="product"></a></p>
+                <ul>
+                    <li th:each="category : ${type.categoryList}">
+                        <a th:text="${category?.name}" th:href="@{'/selectCategoryId/'+${category.categoryId}}"></a>
+                    </li>
+                </ul>
+            </div>-->
+
+            <div class="form-group">
+                <select id="typeselect" >
+                    <div th:each="type : ${#session.getAttribute('typelistinsert')}">
+                        <option  th:value="${type.typeId}">[(${type.name})]</option>
+                    </div>
+                </select>
+            </div>
+            <div class="form-group">
+                <input id="cname" type="text"  name="cname" class="form-control checkcode" placeholder="输入产品类型"/>
+                <div class="pull-left"><div id="v_container" style="width: 150px;height: 50px;"></div>
+                    <br>
+
+
+                </div>
+
+
+                <div class="form-group">
+                    <button id="commit" type="button" class="btn btn-block">添加类型</button>
+                </div>
+                <h5><a href="javascript:history.back()">返回</a></h5>
+                </form>
+            </div>
+
+            <div class="sticky">
+                <div><a href="#" title="返回顶部"><i class="icon-angle-up"></i></a></div>
+            </div>
+            <!--置顶-->
+</body>
+<script>
+
+    $("#commit").click(function () {
+
+        $.ajax({
+            url:"insertcategoryaction",
+            data:{
+                cname:$("#cname").val(),
+                typeid:$("#typeselect option:selected").val()
+
+            },
+            success:function (data) {
+                if(data != 0){
+                    alert("添加成功！");
+                    window.location.href="adminindex";
+                }else{
+                    alert("添加失败！");
+                }
+
+            }
+
+        })
+    })
+
+</script>
+</html>

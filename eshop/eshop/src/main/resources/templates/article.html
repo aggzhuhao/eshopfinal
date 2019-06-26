@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>帮助中心</title>
+    <link  type="text/css" href="css/bootstrap.min.css" rel="stylesheet">
+    <link type="text/css" href="css/style.css" rel="stylesheet">
+    <link type="text/css" href="css/font-awesome.min.css" rel="stylesheet">
+    <script type="text/javascript" src="js/jquery-1.11.3.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" data-main="js/main" src="js/checkcode.js"></script>
+    <script type="text/javascript" data-main="js/main" src="js/jquery.validate.js"></script>
+    <style>
+        #registerform label.error {
+            margin-left: 10px;
+            width: auto;
+            display: inline;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<div class="top">
+    <div class="container">
+        <div class="pull-left top-text">
+            <span th:if="${#session?.getAttribute('user')} != null">Hi～亲爱的[(${#session.getAttribute("user")?.username})]</span>
+            <a th:if="${#session?.getAttribute('user')}  == null" th:href="@{/login}">登录</a>
+            <a th:if="${#session?.getAttribute('user')}  == null" th:href="@{/register}">注册</a>
+            <a th:if="${#session?.getAttribute('user')}  != null" th:href="@{/removeuser}">注销</a>
+        </div>
+        <div th:if="${#session?.getAttribute('user')}  != null" class="pull-right user-info">
+            <div class="top-group" style="cursor: pointer">
+                我的账户 <i class="icon-angle-down"></i>
+                <div class="user-menu">
+                    <a href="/article/zhuceyonghu">注册新用户</a></li>
+                    <a href="/article/xieyi">用户协议</a></li>
+                    <a href="/article/xiugaixinxi">修改信息</a></li>
+                </div>
+            </div>
+            <div class="top-group"><a href="orderlist"><i class="icon-reorder"></i>我的订单</a></div>
+            <div class="top-group"><a id="tocart" href="javascript:void(0)"><i class="icon-shopping-cart"></i>购物车</a></div>
+        </div>
+    </div>
+</div>
+<div class="header">
+    <div class="container">
+        <div class="logo pull-left">
+            <a href="#">
+                <img src="images/logo.png" width="250px" height="100px" >
+            </a>
+        </div>
+        <div class="nav-menu pull-left">
+            <ul class="nav navbar-nav">
+                <li ><a href="/index">首页</a></li>
+                <li ><a href="/shownew">每周新品预售</a></li>
+                <li><a href="/discount">限时打折</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="main">
+<div class="container">
+    <div class="content-text">
+        <div class="mark-title">
+              <h3 class="pull-left">帮助中心 INFO CENTER</h3><h3 class="pull-right">联系客服：Q1038334827</h3>
+        </div>
+        <div class="pull-left">
+            <div class="list-group">
+                <a id="zhuce" href="javascript:void(0)"class="list-group-item">注册新用户</a>
+                <a id="xieyi" href="javascript:void(0)" class="list-group-item">用户协议</a>
+                <a id="xiugaixinxi" href="javascript:void(0)" class="list-group-item">修改信息</a>
+            </div>
+            <div class="list-group">
+                <a id="gouwuliucheng" href="javascript:void(0)" class="list-group-item">购物流程</a>
+            </div>
+            <div class="list-group">
+                <a id="gouwucheshuoming" href="javascript:void(0)" class="list-group-item">购物车说明</a>
+            </div>
+        </div>
+        <div name="pullright" class="pull-right article-right" th:if="${session.param == '用户协议'}">
+            <div class="article-title"><p th:text="用户协议"></p></div>
+            <div class="article-text">
+                <article>
+                <p>1、如果您需要开具普通发票，可在选购完商品后点击“立即购买”，在确认订单页面打开“发票”选项，选择“个人”或“公司”。如选择“公司”，需填写公司全称。</p>
+
+                <p>2、有范将会在您完成订单后尽快开具发票。原则上收货地址为江浙沪皖范围的订单，发票将随同货品一起邮寄，其他地区在收到包裹后七天左右单独发出。</p>
+
+                <p>3、如果您需要开具增值税发票，请您联系在线客服并提供相对应的公司委托您个人采购货物并付款的授权委托书（授权委托书需签署您的名字并加盖公司公章， </p>公司名称要求与增票抬头一致）、公司的营业执照复印件、税务登记证复印件、一般纳税人资格证明、开票资料等资料。客服在确认所有材料齐全合格后，会 尽快为您开具发票。原则上收货地址为江浙沪皖范围的订单，发票将随同货品一起邮寄，其他地区在收到包裹后七天左右单独发出。
+
+                4、注意事项：发票金额不能高于订单金额。非现金虚拟账户支付的金额和礼品卡、红包、支付的金额不开发票。（非现金虚拟账户如：有范的一些促销活动中 赠送客户范票的金额，已获得过有范的发票的金额。） 如：订单总金额为500元，使用范票支付100元，选择开具发票后，发票金额为400元，不包含100元范 票支付的金额。
+
+                5、补、换发票流程：如果您需要补开发票，请您先与在线客服联系，客服会在核对好订单后根据您提供的资料重新开具发票。补开的发票会在七日左右邮寄出 ，运费由客户承担。
+
+                6、如果您在收到发票后发现发票抬头、内容或金额等与下订单时所填写的项目不符，请先与客服联系确认后，将原发票退回，收到退回发票后七天左右， 新发票会以挂号信形式寄出。如果是由于客户原因需要更换发票，则运费由客户承担。
+                </article>
+            </div>
+
+
+        </div>
+        <div name="pullright" class="pull-right article-right" th:if="${session.param == '注册新用户'}">
+            <div class="article-title"><p th:text="注册新用户"></p></div>
+            <div class="register-form ">
+                <form id="registerform" class="form-horizontal" method="post" action="/createUser">
+                    <div class="form-group">
+                        <i class="icon-user"></i>
+                        <input id="username" type="text" name="username"  class="form-control" placeholder="用户名"/>
+                    </div>
+                    <div class="form-group">
+                        <i class=" icon-envelope"></i>
+                        <input name="email" id="email" class="form-control" placeholder="邮箱"/>
+                    </div>
+                    <div class="form-group">
+                        <i class="icon-phone"></i>
+                        <input type="text" name="phone" class="form-control" placeholder="手机"/>
+                    </div>
+                    <div class="form-group">
+                        <i class="icon-key"></i>
+                        <input type="password" id="password" name="password" class="form-control" placeholder="密码"/>
+                    </div>
+                    <div class="form-group">
+                        <i class="icon-lock"></i>
+                        <input type="password" name="password1" class="form-control" placeholder="确认密码"/>
+                    </div>
+                    <div class="form-group">
+                        <i class="icon-check"></i>
+                        <input id="codeinput" type="text"  name="codeinput" class="form-control checkcode" placeholder="验证码"/>
+                        <div class="pull-left"><div id="v_container" style="width: 150px;height: 50px;"></div>
+                        </div>
+                    </div>
+                    <label id="checklabel" style="color: red;display: none ">验证码不正确</label>
+                    <div class="form-group">
+                        <button id="commit" type="button" class="btn btn-block">立即注册</button>
+                    </div>
+                    <div class="form-group">
+                        <h5>已经帐号？<a href="login">立即登录</a></h5>
+                    </div>
+                    <div class="form-group">
+                        <h5><a href="index">返回首页</a></h5>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div name="pullright" class="pull-right article-right" th:if="${session.param == '修改信息'}">
+            <div class="article-title"><p>修改信息</p></div>
+            <div class="register-form ">
+                    <div class="form-group">
+                        <i class="icon-lock"></i>
+                        <input type="password" id="passwordenter" name="password1" class="form-control" placeholder="请输入密码"/>
+                    </div>
+
+                    <label id="checkpass" style="color: red; display: none">密码不正确</label>
+                    <div class="form-group">
+                        <button id="querenmima1" type="button1" class="btn btn-block">确认</button>
+                    </div>
+
+                    <div class="form-group">
+                        <h5><a href="/index">返回首页</a></h5>
+                    </div>
+            </div>
+        </div>
+
+
+        <div name="pullright" class="pull-right article-right" th:if="${session.param == '购物流程'}">
+            <div class="article-title"><p th:text="购物流程"></p></div>
+            <div class="article-text">
+                <div class="pull-left">
+                    <div class="cart-process">
+                        <div class="line"></div>
+                        <div class="process-item">
+                            <div>1</div>
+                            <p>购物车</p>
+                        </div>
+                        <div class="process-item ">
+                            <div>2</div>
+                            <p>确认订单</p>
+                        </div>
+                        <div class="process-item">
+                            <div >3</div>
+                            <p>订单列表</p>
+                        </div>
+                    </div>
+                </div>
+            </div><br><br><br><br><br>
+            <article>
+                <p>1.购物车、用户需要将商品加入购物车的时候，则会进入该环节，该环节可以修改商品数量，结算购物车以及返回。</p>
+
+                <p>2.确认订单、结算购物车或者单个购买商品的时候则会进入该环节，该环节需要用户输入收件人的详细信息以便发货，选择玩支付方式则支付订单</p>
+
+                <p>3.订单列表、用户可以查看自己的订单列表，点击订单列表则会进入订单明细，查看订单详情 </p>
+
+            </article>
+
+        </div>
+
+        <div name="pullright" class="pull-right article-right" th:if="${session.param == '购物车说明'}">
+            <div class="article-title"><p>购物车说明</p></div>
+            <div class="article-text">
+                <article>
+                    <p>购物车功能指的是应用于网店的在线购买功能，它类似于超市购物时使用的推车或篮子，</p><br>
+                    <p></p>可以暂时把挑选商品放入购物车、删除或更改购买数量，并对多个商品进行一次结款，</p><br>
+                    <p>    是网上商店里的一种快捷购物工具。</p>
+                </article>
+
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<div class="footer">
+    <div class="container">
+        <div class="footer-group pull-left">
+            <ul class="footer-list">
+                <li class="top-title"><span>新手指南</span></li>
+                <li><a href="/article/zhuceyonghu">注册新用户</a></li>
+                <li><a href="/article/xieyi">用户协议</a></li>
+                <li><a href="/article/xiugaixinxi">修改信息</a></li>
+            </ul>
+            <ul class="footer-list">
+                <li class="top-title"><span>购物指南</span></li>
+                <li><a href="/article/gouwuliucheng">购物流程</a></li>
+            </ul>
+            <ul class="footer-list">
+                <li class="top-title"><span>购物车</span></li>
+                <li><a href="/article/gouwucheshuoming">购物车说明</a></li>
+            </ul>
+        </div>
+        <div class="footer-group pull-right">
+            <div class="contact">
+                <img src="images/contact.jpg">
+            </div>
+            <p>监督：1038334827</p>
+            <p> 在线客服</p>
+        </div>
+        <div class="copy-right">
+            <p><span>CopyRight © 2018-2019 127.0.0.1:8080 right to zh</span></p>
+        </div>
+    </div>
+</div>
+<div class="sticky">
+    <div><a href="#" title="返回顶部"><i class="icon-angle-up"></i></a></div>
+</div>
+<!--置顶-->
+</body>
+<script>
+    $(function () {
+
+        var reg = new RegExp("^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$");
+/* a id="zhuce" href="#" class="list-group-item">注册新用户</a>
+            <a id="xieyi" href="#" class="list-group-item">用户协议</a>
+            <a id="xiugaixinxi" href="#" class="list-group-item">修改信息</a>*/
+        $("#zhuce").click(function () {
+            $("[name='pullright']").empty();
+            $("[name='pullright']").append(
+                `
+                <div class="article-title"><p>注册新用户</p></div>
+                <div class="register-form ">
+                <form id="registerform" class="form-horizontal" method="post" action="/createUser">
+                    <div class="form-group">
+                        <i class="icon-user"></i>
+                        <input id="username" type="text" name="username" class="form-control" placeholder="用户名"/>
+                    </div>
+                    <div class="form-group">
+                        <i class=" icon-envelope"></i>
+                        <input id="email" name="email" class="form-control" placeholder="邮箱"/>
+                    </div>
+                    <div class="form-group">
+                        <i class="icon-phone"></i>
+                        <input type="text" name="phone" class="form-control" placeholder="手机"/>
+                    </div>
+                    <div class="form-group">
+                        <i class="icon-key"></i>
+                        <input type="password" id="password" name="password" class="form-control" placeholder="密码"/>
+                    </div>
+                    <div class="form-group">
+                        <i class="icon-lock"></i>
+                        <input type="password" name="password1" class="form-control" placeholder="确认密码"/>
+                    </div>
+                    <div class="form-group">
+                        <i class="icon-check"></i>
+                        <input id="codeinput" type="text"  name="codeinput" class="form-control checkcode" placeholder="验证码"/>
+                        <div class="pull-left"><div id="v_container" style="width: 150px;height: 50px;"></div>
+                        </div>
+                    </div>
+                    <label id="checklabel" style="color: red;display: none ">验证码不正确</label>
+                    <div class="form-group">
+                        <button id="commit" type="button" class="btn btn-block">立即注册</button>
+                    </div>
+                    <div class="form-group">
+                        <h5>已经帐号？<a href="login">立即登录</a></h5>
+                    </div>
+                    <div class="form-group">
+                        <h5><a href="index">返回首页</a></h5>
+                    </div>
+                </form>
+            </div>
+                `
+            )
+            $("#codeinput").click(function(){
+                $("#checklabel").hide();
+            })
+            var verifyCode = new GVerify("v_container");
+            $("#commit").click(function(){
+                //验证码校验
+                var res = verifyCode.validate(document.getElementById("codeinput").value);
+                if(res){
+                    if(!reg.test($("#email").val())){
+                        $("#email").after(`<label id="email-error" class="error" for="email">请输入正确的邮箱格式！</label>`)
+                    }else{
+                        $("#registerform").submit();
+                    }
+
+                }else{
+                    $("#checklabel").show();
+                }
+            })
+            $("#registerform").validate({
+                rules:{
+                    username:{
+                        required:true,
+                        remote:{//ajax校验数据库是否存在该账号
+                            url:"/checkusername",
+                            type:"post",
+                            data:{
+                                "username":function(){
+                                    return $("#username").val();
+                                }
+                            }
+                        }
+                    },
+                    email:{
+                        required:true,
+                        remote:{
+                            url:"/checkemail",
+                            type:"post",
+                            data:{
+                                "email":function(){
+                                    return $("#email").val();
+                                }
+                            }
+                        }
+                    },
+                    phone:{
+                        required:true
+                    },
+                    password:{
+                        required:true
+                    },
+                    password1:{
+                        equalTo:"#password"
+                    }
+                },messages:{
+                    username:{
+                        required:"姓名不能为空",
+                        remote:"已经存在该账户"
+                    },
+                    email:{
+                        required:"邮箱不能为空",
+                        remote:"该邮箱已经被注册！"
+                    },
+                    phone:{
+                        required:"手机号不能为空"
+                    },
+                    password:{
+                        required:"密码不能为空"
+                    },
+                    password1:{
+                        equalTo:"两次输入的密码不一致"
+                    }
+                }
+            })
+
+        }) //--
+
+        $("#xieyi").click(function () {
+            $("[name='pullright']").empty();
+            $("[name='pullright']").append(
+                `
+                <div class="article-title"><p >用户协议</p></div>
+            <div class="article-text">
+                <article>
+                <p>1、如果您需要开具普通发票，可在选购完商品后点击“立即购买”，在确认订单页面打开“发票”选项，选择“个人”或“公司”。如选择“公司”，需填写公司全称。</p>
+
+                <p>2、有范将会在您完成订单后尽快开具发票。原则上收货地址为江浙沪皖范围的订单，发票将随同货品一起邮寄，其他地区在收到包裹后七天左右单独发出。</p>
+
+                <p>3、如果您需要开具增值税发票，请您联系在线客服并提供相对应的公司委托您个人采购货物并付款的授权委托书（授权委托书需签署您的名字并加盖公司公章， </p>公司名称要求与增票抬头一致）、公司的营业执照复印件、税务登记证复印件、一般纳税人资格证明、开票资料等资料。客服在确认所有材料齐全合格后，会 尽快为您开具发票。原则上收货地址为江浙沪皖范围的订单，发票将随同货品一起邮寄，其他地区在收到包裹后七天左右单独发出。
+
+                4、注意事项：发票金额不能高于订单金额。非现金虚拟账户支付的金额和礼品卡、红包、支付的金额不开发票。（非现金虚拟账户如：有范的一些促销活动中 赠送客户范票的金额，已获得过有范的发票的金额。） 如：订单总金额为500元，使用范票支付100元，选择开具发票后，发票金额为400元，不包含100元范 票支付的金额。
+
+                5、补、换发票流程：如果您需要补开发票，请您先与在线客服联系，客服会在核对好订单后根据您提供的资料重新开具发票。补开的发票会在七日左右邮寄出 ，运费由客户承担。
+
+                6、如果您在收到发票后发现发票抬头、内容或金额等与下订单时所填写的项目不符，请先与客服联系确认后，将原发票退回，收到退回发票后七天左右， 新发票会以挂号信形式寄出。如果是由于客户原因需要更换发票，则运费由客户承担。
+                </article>
+            </div>
+                `
+            )
+
+        })
+
+        $("#xiugaixinxi").click(function () {
+
+            $("[name='pullright']").empty();
+            $("[name='pullright']").append(
+                `
+                <div class="article-title"><p>修改信息</p></div>
+            <div class="register-form ">
+                    <div class="form-group">
+                        <i class="icon-lock"></i>
+                        <input type="password" id="passwordenter" name="password1" class="form-control" placeholder="请输入密码"/>
+                    </div>
+
+                    <label id="checkpass" style="color: red; display: none">密码不正确</label>
+                    <div class="form-group">
+                        <button id="querenmima1" type="button1" class="btn btn-block">确认</button>
+                    </div>
+
+                    <div class="form-group">
+                        <h5><a href="/index">返回首页</a></h5>
+                    </div>
+            </div>
+                `
+            )
+            $("#querenmima1").click(function () {
+                var password = $("#passwordenter").val();
+                $.ajax({
+                    url:"checkuserpassword",
+                    data:{
+                        password:password
+                    },
+                    success:function (data) {
+                        if(data == 1){
+                            $("[name='pullright']").empty();
+                            $("[name='pullright']").append(
+                                `
+                                <div class="article-title"><p>修改信息</p></div>
+                                <div class="register-form ">
+                                <form id="registerform" class="form-horizontal" method="post" action="/createUser">
+                                    <div class="form-group">
+                                        <i class="icon-key"></i>
+                                        <input type="password" id="passwordxiugai" name="passwordxiugai" class="form-control" placeholder="请输入新密码"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <i class="icon-lock"></i>
+                                        <input type="password" id="passwordxiugai1" name="passwordxiugai" class="form-control" placeholder="确认密码"/>
+                                    </div>
+                                    <label id="checkpasskong" style="color: red"></label>
+                                    <div class="form-group">
+                                        <button id="commitxiugai" type="button" class="btn btn-block">立即修改</button>
+                                    </div>
+
+                                </form>
+                            </div>
+                            `
+                            )
+                        }else if(data == 2){
+                            $("#checkpass").css("display","");
+                            $("#passwordenter").click(function () {
+                                $("#checkpass").css("display","none");
+                            })
+                        }else{
+                            alert("请先登录账号！");
+                        }
+                    },complete:function () {
+                        $("#passwordxiugai").click(function () {
+                            $("#checkpasskong").text("");
+                        })
+                        $("#commitxiugai").click(function () {
+
+                            var value01 = $("#passwordxiugai").val();
+                            var value02 = $("#passwordxiugai1").val();
+                            if(value01 == ""){
+                                $("#checkpasskong").text("新密码不得为空");
+                            }else if(value01 != value02){
+                                $("#checkpasskong").text("两次输入的密码 不一致");
+                            }else{
+                                window.location.href = "updateUserpassword/"+value01;
+                            }
+                        })
+                    },error:function () {
+                        alert("请先登录账号！");
+                    }
+                })
+            })
+            $("#codeinput").click(function(){
+                $("#checklabel").hide();
+            })
+            var verifyCode = new GVerify("v_container");
+           /* $("#commit").click(function(){
+                //验证码校验
+                var res = verifyCode.validate(document.getElementById("codeinput").value);
+                if(res){
+                    if(!reg.test($("#email").val())){
+                        $("#email").after(`<label id="email-error" class="error" for="email">请输入正确的邮箱格式！</label>`)
+                    }else{
+                        $("#registerform").submit();
+                    }
+
+                }else{
+                    $("#checklabel").show();
+                }
+            })*/
+            /*$("#registerform").validate({
+                rules:{
+                    username:{
+                        required:true
+                    },
+                    email:{
+                        required:true
+                    },
+                    phone:{
+                        required:true
+                    },
+                    password:{
+                        required:true
+                    },
+                    password1:{
+                        equalTo:"#password"
+                    }
+                },messages:{
+                    username:{
+                        required:"姓名不能为空"
+                    },
+                    email:{
+                        required:"邮箱不能为空"
+                    },
+                    phone:{
+                        required:"手机号不能为空"
+                    },
+                    password:{
+                        required:"密码不能为空"
+                    },
+                    password1:{
+                        equalTo:"两次输入的密码不一致"
+                    }
+                }
+            })*/
+
+        })//zhuce
+        $("#gouwuliucheng").click(function () {
+
+            $("[name='pullright']").empty();
+            $("[name='pullright']").append(`
+                <div class="article-title"><p ></p>购物流程</div>
+            <div class="article-text">
+                <div class="pull-left">
+                <div class="cart-process">
+                <div class="line"></div>
+                <div class="process-item">
+                <div>1</div>
+                <p>购物车</p>
+                </div>
+                <div class="process-item ">
+                <div>2</div>
+                <p>确认订单</p>
+                </div>
+                <div class="process-item">
+                <div >3</div>
+                <p>订单列表</p>
+                </div>
+                </div>
+                </div>
+                </div><br><br><br><br><br>
+                <article>
+                <p>1.购物车、用户需要将商品加入购物车的时候，则会进入该环节，该环节可以修改商品数量，结算购物车以及返回。</p>
+
+            <p>2.确认订单、结算购物车或者单个购买商品的时候则会进入该环节，该环节需要用户输入收件人的详细信息以便发货，选择玩支付方式则支付订单</p>
+
+            <p>3.订单列表、用户可以查看自己的订单列表，点击订单列表则会进入订单明细，查看订单详情 </p>
+
+            </article>
+
+            `);
+
+
+        })//liucheng
+
+        $("#gouwucheshuoming").click(function () {
+            $("[name='pullright']").empty();
+            $("[name='pullright']").append(`
+
+                <div class="article-title"><p>购物车说明</p></div>
+            <div class="article-text">
+                <article>
+                <p>购物车功能指的是应用于网店的在线购买功能，它类似于超市购物时使用的推车或篮子，</p><br>
+            <p></p>可以暂时把挑选商品放入购物车、删除或更改购买数量，并对多个商品进行一次结款，</p><br>
+            <p>    是网上商店里的一种快捷购物工具。</p>
+            </article>
+
+            </div>
+
+
+            `)
+
+        })
+
+    })
+
+
+    $(function(){
+        var reg = new RegExp("^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$");
+        $("#querenmima1").click(function () {
+            var password = $("#passwordenter").val();
+            $.ajax({
+                url:"checkuserpassword",
+                data:{
+                    password:password
+                },
+                success:function (data) {
+                    if(data == 1){
+                        $("[name='pullright']").empty();
+                        $("[name='pullright']").append(
+                            `
+                                <div class="article-title"><p>注册新用户</p></div>
+                                <div class="register-form ">
+                                <form id="registerform" class="form-horizontal" method="post" action="/createUser">
+                                    <div class="form-group">
+                                        <i class="icon-key"></i>
+                                        <input type="password" id="passwordxiugai" name="passwordxiugai" class="form-control" placeholder="请输入新密码"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <i class="icon-lock"></i>
+                                        <input type="password" id="passwordxiugai1" name="passwordxiugai" class="form-control" placeholder="确认密码"/>
+                                    </div>
+                                    <label id="checkpasskong" style="color: red"></label>
+                                    <div class="form-group">
+                                        <button id="commitxiugai" type="button" class="btn btn-block">立即修改</button>
+                                    </div>
+
+                                </form>
+                            </div>
+                            `
+                        )
+                    }else if(data == 2){
+                        $("#checkpass").css("display","");
+                        $("#passwordenter").click(function () {
+                            $("#checkpass").css("display","none");
+                        })
+                    }else{
+                        alert("请先登录账号！");
+                    }
+                },complete:function () {
+                    $("#passwordxiugai").click(function () {
+                        $("#checkpasskong").text("");
+                    })
+                    $("#commitxiugai").click(function () {
+
+                        var value01 = $("#passwordxiugai").val();
+                        var value02 = $("#passwordxiugai1").val();
+                        if(value01 == ""){
+                            $("#checkpasskong").text("新密码不得为空");
+                        }else if(value01 != value02){
+                            $("#checkpasskong").text("两次输入的密码 不一致");
+                        }else{
+                            window.location.href = "updateUserpassword/"+value01;
+                        }
+                    })
+                },error:function () {
+                }
+            })
+        })
+        //表单校验
+        $("#codeinput").click(function(){
+            $("#checklabel").hide();
+        })
+        var verifyCode = new GVerify("v_container");
+        $("#commit").click(function(){
+            //验证码校验
+            var res = verifyCode.validate(document.getElementById("codeinput").value);
+            if(res){
+                if(!reg.test($("#email").val())){
+                    $("#email").after(`<label id="email-error" class="error" for="email">请输入正确的邮箱格式！</label>`)
+                }else{
+                    $("#registerform").submit();
+                }
+
+            }else{
+                $("#checklabel").show();
+            }
+        })
+        $("#registerform").validate({
+            rules:{
+                username:{
+                    required:true,
+                    remote:{//ajax校验数据库是否存在该账号
+                        url:"/checkusername",
+                        type:"post",
+                        data:{
+                            "username":function(){
+                                return $("#username").val();
+                            }
+                        }
+                    }
+                },
+                email:{
+                    required:true,
+                    remote:{
+                        url:"/checkemail",
+                        type:"post",
+                        data:{
+                            "email":function(){
+                                return $("#email").val();
+                            }
+                        }
+                    }
+                },
+                phone:{
+                    required:true
+                },
+                password:{
+                    required:true
+                },
+                password1:{
+                    equalTo:"#password"
+                }
+            },messages:{
+                username:{
+                    required:"姓名不能为空",
+                    remote:"已经存在该账户"
+                },
+                email:{
+                    required:"邮箱不能为空",
+                    remote:"该邮箱已经被注册！"
+                },
+                phone:{
+                    required:"手机号不能为空"
+                },
+                password:{
+                    required:"密码不能为空"
+                },
+                password1:{
+                    equalTo:"两次输入的密码不一致"
+                }
+            }
+        })
+
+        $("#tocart").click(function () {
+            window.location.href="/selectAllshoppingCartInproduct";
+        })
+
+    })
+</script>
+</html>

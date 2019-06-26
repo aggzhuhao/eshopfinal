@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>商城首页</title>
+    <link  type="text/css" th:href="@{css/bootstrap.min.css}" rel="stylesheet">
+    <link type="text/css" th:href="@{css/style.css}" rel="stylesheet">
+    <link type="text/css" th:href="@{css/font-awesome.min.css}" rel="stylesheet">
+    <script type="text/javascript" th:src="@{js/jquery-1.11.3.js}"></script>
+    <script type="text/javascript" th:src="@{js/bootstrap.min.js}"></script>
+    <script type="text/javascript" data-main="js/main" th:src="@{js/require.js}"></script>
+</head>
+<body>
+<div class="top">
+<div class="container">
+ <div class="pull-left top-text">
+     <span th:if="${#session?.getAttribute('user')} != null">Hi～亲爱的[(${#session.getAttribute("user")?.username})]</span>
+     <a th:if="${#session?.getAttribute('user')}  == null" th:href="@{/login}">登录</a>
+     <a th:if="${#session?.getAttribute('user')}  == null" th:href="@{/register}">注册</a>
+     <a th:if="${#session?.getAttribute('user')}  != null" th:href="@{/removeuser}">注销</a>
+ </div>
+  <div th:if="${#session?.getAttribute('user')}  != null" class="pull-right user-info">
+      <div class="top-group" style="cursor: pointer">
+          我的账户 <i class="icon-angle-down"></i>
+                  <div class="user-menu">
+              <a href="/article/zhuceyonghu">注册新用户</a></li>
+                      <a href="/article/xieyi">用户协议</a></li>
+                      <a href="/article/xiugaixinxi">修改信息</a></li>
+          </div>
+              </div>
+          <div class="top-group"><a href="orderlist"><i class="icon-reorder"></i>我的订单</a></div>
+          <div class="top-group"><a id="tocart" href="javascript:void(0)"><i class="icon-shopping-cart"></i>购物车</a></div>
+      </div>
+  </div>
+</div>
+<div class="header">
+    <div class="container">
+        <div class="logo pull-left">
+            <a href="#">
+                <img src="images/logo.png" width="250px" height="100px" >
+            </a>
+        </div>
+        <div class="nav-menu pull-left">
+            <ul class="nav navbar-nav">
+                <li ><a href="/index">首页</a></li>
+                <li ><a href="/shownew">每周新品预售</a></li>
+                <li><a href="/discount">限时打折</a></li>
+            </ul>
+        </div>
+        <div class="nav-deck pull-right">
+            <a class="search" href="#"><i class="icon-search"></i></a>
+        </div>
+        <div class="search-frame">
+
+            <div class="search-btn"><a href="#"><i class="icon-search"></i></a></div>
+            <div><input id="search" type="text" name="word" placeholder="搜索品牌、商品"></div>
+            <div class="search-close"><a href="#"><span aria-hidden="true">&times;</span></a></div>
+
+      </div>
+  </div>
+</div>
+<div class="main">
+    <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+        <!-- Indicators -->
+        <ol class="carousel-indicators">
+            <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+            <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+            <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+        </ol>
+        <!-- Wrapper for slides -->
+        <div class="carousel-inner" role="listbox">
+            <div class="item active">
+                <a id="s11" href="getproductById/1/2" target="_blank"><img src="https://img.alicdn.com/simba/img/TB1wSQqgYGYBuNjy0FoSuwiBFXa.jpg" width="650px"></a>
+            </div>
+            <div class="item">
+                <a id="s22" href="getproductById/7/5" target="_blank"><img src="images/side2.jpg"></a>
+            </div>
+            <div class="item">
+                <a id="s33" href="getproductById/2/5" target="_blank"><img src="images/side3.jpg"></a>
+            </div>
+        </div>
+        <!-- Controls -->
+        <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+    <!--幻灯片-->
+    <div class="container">
+     <div class="category">
+       <div class="category-title"><h5>全部商品分类</h5></div>
+        <div class="list">
+            <div th:each="type : ${#session.getAttribute('typelist')}" class="cate-list">
+                <p class="max-title"><a th:text="${type.name}" style="cursor:pointer" name="product"></a></p>
+                <ul>
+                    <li th:each="category : ${type.categoryList}">
+                        <a th:text="${category?.name}" th:href="@{'/selectCategoryId/'+${category.categoryId}}"></a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+           </div>
+     <div class="category-item">
+        <div class="item-title">
+            <h3><i class="icon-th-large"></i>商品预览</h3>
+        </div>
+        <div class="item-lits">
+            <ul id="ull">
+                <li th:id="${product.productId}" th:name="${product.categoryId}" th:each="product : ${#session.getAttribute('productlist')}">
+                    <a href="#">
+                        <img th:src="@{${product.imgpath}}"/>
+                        <p>[(${product.description})]</p>
+                        <p><span>￥[(${product.price})]</span><span style="display: none">${product.productId}</span></p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+         <div class="item-bottom">
+             <a id="getProduct" target="_blank" style="cursor: pointer">查看更多商品</a>
+         </div>
+    </div>
+
+<div class="footer">
+    <div class="container">
+    <div class="footer-group pull-left">
+     <ul class="footer-list">
+         <li class="top-title"><span>新手指南</span></li>
+         <li><a href="/article/zhuceyonghu">注册新用户</a></li>
+         <li><a href="/article/xieyi">用户协议</a></li>
+         <li><a href="/article/xiugaixinxi">修改信息</a></li>
+     </ul>
+     <ul class="footer-list">
+        <li class="top-title"><span>购物指南</span></li>
+        <li><a href="/article/gouwuliucheng">购物流程</a></li>
+    </ul>
+        <ul class="footer-list">
+            <li class="top-title"><span>购物车</span></li>
+            <li><a href="/article/gouwucheshuoming">购物车说明</a></li>
+        </ul>
+   </div>
+     <div class="footer-group pull-right">
+         <div class="contact">
+             <img src="images/contact.jpg">
+         </div>
+         <p>监督：1038334827</p>
+        <p> 在线客服</p>
+     </div>
+    <div class="copy-right">
+        <p><span>CopyRight © 2018-2019 127.0.0.1:8080 right to zh</span></p>
+    </div>
+    </div>
+</div>
+<div class="sticky">
+    <div><a href="#" title="返回顶部"><i class="icon-angle-up"></i></a></div>
+</div>
+<!--置顶-->
+</body>
+<script>
+    $(function(){
+        //留着
+        $("[name='product']").click(function(){
+            console.log($(this))
+        })
+
+        $("#getProduct").click(function(){
+            $.ajax({
+                url:"getAllProducts",
+                type:"post",
+                success:function(data){
+                    $("#ull li").remove();
+                    $("#getProduct").empty();
+
+                    /*$.each(data,function(index,product){
+                        console.log(product.price)
+                        $("#ull").append(
+                    "<li> <a href='#'> <img src='"+product.imgpath+"'/> " +
+                        "<p>"+product.description+"</p> " +
+                        "<p><span>￥"+product.price+"</span></p> " +
+                        "</a> </li>"
+                    )})*/
+                    $.each(data,function(index,product){
+                        $("#ull").append(`
+                            <li id="${product.productId}" name="${product.categoryId}"> <a href='#'> <img src='${product.imgpath}'/>
+                            <p>${product.description}</p>
+                            <p><span>￥${product.price}</span>
+                            </p>
+                            </a> </li>`
+                        )
+
+                    })
+
+                },complete:function(){
+                    $("#ull li").click(function(){
+                        window.location.href="getproductById/"+$(this).attr("id")+"/"+$(this).attr("name");
+                    })
+                }
+            })
+        })
+        $("#ull li").click(function(){
+            window.location.href="getproductById/"+$(this).attr("id")+"/"+$(this).attr("name");
+
+        })
+
+        $("#search").keyup(function(event){
+            var data = $("#search").val();
+            $("#ull").empty();
+              $.ajax({
+                   url:"/searchlikeproduct",
+                   data:{
+                       data:data
+                   },
+                    success:function(data){
+                        $("#ull li").remove();
+                        $("#getProduct").empty();
+                        $("h3").remove();
+                        $("#carousel-example-generic").remove();
+                       if(data.length != 0) {
+
+                           $.each(data, function (index, product) {
+                               $("#ull").append(`
+                            <li id="${product.productId}" name="${product.categoryId}"> <a href='#'> <img src='${product.imgpath}'/>
+                            <p>${product.description}</p>
+                            <p><span>￥${product.price}</span>
+                            </p>
+                            </a> </li>`
+                               )
+
+                           })
+                           $("#ull li").click(function () {
+                               window.location.href = "getproductById/" + $(this).attr("id")+"/"+$(this).attr("name");
+                           })
+                       }else{
+                           $("#ull").append("<h2>没有搜到商品</h2>")
+                       }
+                    }
+               })
+
+        });
+
+        $("#tocart").click(function () {
+            window.location.href="/selectAllshoppingCartInproduct";
+        })
+    })
+</script>
+</html>

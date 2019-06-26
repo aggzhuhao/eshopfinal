@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>管理员首页</title>
+    <link  type="text/css" th:href="@{css/bootstrap.min.css}" rel="stylesheet">
+    <link type="text/css" th:href="@{css/style.css}" rel="stylesheet">
+    <link type="text/css" th:href="@{css/font-awesome.min.css}" rel="stylesheet">
+    <script type="text/javascript" th:src="@{js/jquery-1.11.3.js}"></script>
+    <script type="text/javascript" th:src="@{js/bootstrap.min.js}"></script>
+    <script type="text/javascript" data-main="js/main" th:src="@{js/require.js}"></script>
+</head>
+<body>
+<div class="top">
+<div class="container">
+ <div class="pull-left top-text">
+     <span th:if="${#session?.getAttribute('admin')} != null">Hi～亲爱的管理员[(${#session.getAttribute("admin")?.username})]</span>
+     <a th:if="${#session?.getAttribute('admin')}  != null" th:href="@{/removeadmin}">注销</a>
+
+ </div>
+
+</div>
+</div>
+<div class="header">
+  <div class="container">
+  <div class="nav-menu pull-left">
+      <ul class="nav navbar-nav">
+          <li ><a href="adminindex">管理员操作首页</a></li>
+          <li ><a href="insertproduct">新增商品</a></li>
+          <li ><a href="inserttypet">新增分类</a></li>
+          <li ><a href="insertcategory">新增类型</a></li>
+      </ul>
+  </div>
+  <div class="nav-deck pull-right">
+    <a class="search" href="#"><i class="icon-search"></i></a>
+  </div>
+      <div class="search-frame">
+
+              <div class="search-btn"><a href="#"><i class="icon-search"></i></a></div>
+              <div><input id="search" type="text" name="word" placeholder="搜索品牌、商品"></div>
+              <div class="search-close"><a href="#"><span aria-hidden="true">&times;</span></a></div>
+
+      </div>
+  </div>
+</div>
+<div class="main">
+
+    <div class="container">
+     <div class="category">
+       <div class="category-title"><h5>全部商品分类</h5></div>
+        <div class="list">
+            <div th:each="type : ${#session.getAttribute('typelist')}" class="cate-list">
+                <p class="max-title"><a th:text="${type.name}" style="cursor:pointer" name="product"></a></p>
+                <ul>
+                    <li th:each="category : ${type.categoryList}">
+                        <a th:text="${category?.name}" th:href="@{'/selectCategoryIdadmin/'+${category.categoryId}}"></a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+           </div>
+     <div class="category-item">
+        <div class="item-title">
+            <h3><i class="icon-th-large"></i>商品预览</h3>
+        </div>
+        <div class="item-lits">
+            <ul id="ull">
+                <li th:id="${product.productId}" th:name="${product.categoryId}" th:each="product : ${#session.getAttribute('productlist')}">
+                    <a href="#">
+                        <img th:src="@{${product.imgpath}}"/>
+                        <p>[(${product.description})]</p>
+                        <p><span>￥[(${product.price})]</span><span style="display: none">${product.productId}</span></p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+         <div class="item-bottom">
+             <a id="getProduct" target="_blank" style="cursor: pointer">查看更多商品</a>
+         </div>
+    </div>
+
+
+<div class="sticky">
+    <div><a href="#" title="返回顶部"><i class="icon-angle-up"></i></a></div>
+</div>
+<!--置顶-->
+</body>
+<script>
+    $(function(){
+        //留着
+        $("[name='product']").click(function(){
+            console.log($(this))
+        })
+
+        $("#getProduct").click(function(){
+            $.ajax({
+                url:"getAllProducts",
+                type:"post",
+                success:function(data){
+                    $("#ull li").remove();
+                    $("#getProduct").empty();
+
+                    /*$.each(data,function(index,product){
+                        console.log(product.price)
+                        $("#ull").append(
+                    "<li> <a href='#'> <img src='"+product.imgpath+"'/> " +
+                        "<p>"+product.description+"</p> " +
+                        "<p><span>￥"+product.price+"</span></p> " +
+                        "</a> </li>"
+                    )})*/
+                    $.each(data,function(index,product){
+                        $("#ull").append(`
+                            <li id="${product.productId}" name="${product.categoryId}"> <a href='#'> <img src='${product.imgpath}'/>
+                            <p>${product.description}</p>
+                            <p><span>￥${product.price}</span>
+                            </p>
+                            </a> </li>`
+                        )
+
+                    })
+
+                },complete:function(){
+                    $("#ull li").click(function(){
+                        window.location.href="changeproductaction/"+$(this).attr("id")+"/"+$(this).attr("name");
+                    })
+                }
+            })
+        })
+        $("#ull li").click(function(){
+            window.location.href="changeproductaction/"+$(this).attr("id")+"/"+$(this).attr("name");
+
+        })
+
+        $("#search").keyup(function(event){
+            var data = $("#search").val();
+            $("#ull").empty();
+              $.ajax({
+                   url:"/searchlikeproduct",
+                   data:{
+                       data:data
+                   },
+                    success:function(data){
+                        $("#ull li").remove();
+                        $("#getProduct").empty();
+                        $("h3").remove();
+                        $("#carousel-example-generic").remove();
+                       if(data.length != 0) {
+
+                           $.each(data, function (index, product) {
+                               $("#ull").append(`
+                            <li id="${product.productId}" name="${product.categoryId}"> <a href='#'> <img src='${product.imgpath}'/>
+                            <p>${product.description}</p>
+                            <p><span>￥${product.price}</span>
+                            </p>
+                            </a> </li>`
+                               )
+
+                           })
+                           $("#ull li").click(function () {
+                               window.location.href = "changeproductaction/" + $(this).attr("id")+"/"+$(this).attr("name");
+                           })
+                       }else{
+                           $("#ull").append("<h2>没有搜到商品</h2>")
+                       }
+                    }
+               })
+        });
+
+       /* $("#tocart").click(function () {
+            window.location.href="/selectAllshoppingCartInproduct";
+        })*/
+    })
+</script>
+</html>

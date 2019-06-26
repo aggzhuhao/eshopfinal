@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhuhao.eshop.mapper.ShoppingCartMapper" >
+  <resultMap id="BaseResultMap" type="com.zhuhao.eshop.entity.ShoppingCart" >
+    <id column="shopping_cart_id" property="shoppingCartId" jdbcType="INTEGER" />
+    <result column="product_id" property="productId" jdbcType="INTEGER" />
+    <result column="quantity" property="quantity" jdbcType="INTEGER" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+  </resultMap>
+  <insert id="joinshopingcart" parameterType="com.zhuhao.eshop.entity.ShoppingCart">
+    INSERT INTO `shopping_cart`  VALUES (#{shoppingCartId},#{productId},#{quantity},#{username})
+  </insert>
+  <select id="selectcartByUsername" parameterType="com.zhuhao.eshop.entity.User" resultMap="BaseResultMap">
+    SELECT * FROM `shopping_cart` WHERE USERNAME = #{username};
+  </select>
+  <update id="updateShopcartByCartId" parameterType="com.zhuhao.eshop.entity.ShoppingCart">
+    UPDATE shopping_cart set quantity = #{quantity} WHERE shopping_cart_id = #{shoppingCartId}
+  </update>
+  <delete id="removeShoppingcartByID" parameterType="com.zhuhao.eshop.entity.ShoppingCart">
+    DELETE FROM shopping_cart WHERE shopping_cart_id = #{shoppingCartId}
+  </delete>
+  <delete id="removeShoppingcartByUserId" parameterType="com.zhuhao.eshop.entity.User">
+    DELETE FROM shopping_cart WHERE username = #{username}
+  </delete>
+</mapper>

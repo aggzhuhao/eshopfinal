@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhuhao.eshop.mapper.CategoryMapper" >
+  <resultMap id="categorytMap" type="com.zhuhao.eshop.entity.Category" >
+    <id column="category_id" property="categoryId" jdbcType="INTEGER" />
+    <result column="cname" property="name" jdbcType="VARCHAR" />
+    <result column="typeid" property="typeId" jdbcType="INTEGER" />
+    <association property="productList" column="category_id" resultMap="productMap"></association>
+  </resultMap>
+  <resultMap id="productMap" type="com.zhuhao.eshop.entity.Product" >
+    <id column="product_id" property="productId" jdbcType="INTEGER" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="REAL" />
+    <result column="dicount" property="dicount" jdbcType="INTEGER" />
+    <result column="feature" property="feature" jdbcType="VARCHAR" />
+    <result column="imgpath" property="imgpath" jdbcType="VARCHAR" />
+    <result column="novalty_status" property="novaltyStatus" jdbcType="INTEGER" />
+    <result column="category_id" property="categoryId" jdbcType="INTEGER" />
+    <result column="date" property="date" jdbcType="DATE" />
+  </resultMap>
+  <select id="selectAllCategory" resultMap="categorytMap">
+    SELECT * FROM category
+  </select>
+
+
+  <select id="selectproductByCategoryId" resultMap="productMap" parameterType="int">
+    SELECT * FROM PRODUCT p,CATEGORY c WHERE p.category_id = #{categoryId} and p.category_id = c.category_id
+  </select>
+
+
+  <select id="selectBycategoryId" resultMap="categorytMap" parameterType="int">
+    SELECT * FROM CATEGORY WHERE category_id = #{categoryId}
+  </select>
+
+  <insert id="insertcategory" parameterType="com.zhuhao.eshop.entity.Category" >
+    INSERT INTO `category` (`cname`,`typeid`) values (#{name},#{typeId});
+  </insert>
+
+  <select id="getcategoryname" resultMap="categorytMap" parameterType="com.zhuhao.eshop.entity.Type">
+    SELECT * FROM category c,`type` t where c.typeid = t.typeid and t.typeid = #{typeId}
+  </select>
+</mapper>
